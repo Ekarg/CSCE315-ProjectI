@@ -73,7 +73,21 @@ Relation& Relation::uni(const Relation& other, std::string new_rel_name) {
 }
 
 Relation& Relation::difference(const Relation& other, std::string new_rel_name) {
-
+	if ( ( new_rel_name == this->get_name() ) || ( new_rel_name == other.get_name() ) ) {
+		printf("ERROR: Difference Table Name Conflict (Thrown from Relation:uni(); \n");
+	}
+	Relation placehold;
+	Relation *r = new Relation();
+	placehold.get_name() = new_rel_name;
+	for(int i = 0; i < this->relations_ents.size(); ++i) {
+		placehold.insert_entity(this->relations_ents[i]);
+	}
+	for(int j = 0; j < other.relations_ents.size(); ++j) {
+		if ( placehold.insert_entity(other.relations_ents[j]) ) {
+			r->insert_entity(other.relations_ents[j]);
+		}
+	}
+	return (*r);
 }
 
 Relation& Relation::cross(const Relation& other, std::string new_rel_name) {
