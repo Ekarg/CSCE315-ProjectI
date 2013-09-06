@@ -17,6 +17,5 @@
 		<File firstVisibleLine="0" xOffset="0" scrollWidth="640" startPos="304" endPos="304" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Relation.h" />
 		<File firstVisibleLine="0" xOffset="0" scrollWidth="576" startPos="301" endPos="301" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Entity.h" />
 	</subView>
-        <subView activeIndex="1" />
     </Session>
 </NotepadPlus>
