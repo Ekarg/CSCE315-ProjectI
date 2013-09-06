@@ -27,8 +27,8 @@ public:
 	//WATDO WITH PRIMARY KEY? HOW WE WANT TO IMPLEMENT?
 	//void update();          ????????????
 	//void insert_into(Relation, ); ????
-	//void remove(std::string name, Expr e); 	//where Expr = parsed expression
-	void show(std::string rel_name);			//show elements in relation that match atomic expression
+	void remove(std::string rel_name); 		//remove relation from database
+	void show(std::string rel_name);	//print relation to screen
 	void open(std::string rel_name); 	//opens relation
 	void write(std::string rel_name);	//writes relation to file
 	void close(std::string rel_name);	//close relation given relation name

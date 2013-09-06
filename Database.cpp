@@ -43,6 +43,14 @@ void Database::show(std::string rel_name) {
 	}
 }
 
+void Database::remove(std::string rel_name) {
+	for (int i = 0; i < vec_relations.size(); ++i) {
+		if (vec_relations[i].get_name() == rel_name) {
+			vec_relations.erase( (vec_relations.begin() + i) );
+			return;
+		}
+	}
+}
 
 void Database::open(std::string rel_name) {
 
