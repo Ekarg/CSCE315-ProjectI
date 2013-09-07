@@ -17,9 +17,11 @@
 
 class dbms {		//interface or system for managing a database
 private:
-	std::vector<Database> d;
+	Database d;
 
 public: 
+
+	void rename_database(std::string new_dat_name);
 	
 
 };

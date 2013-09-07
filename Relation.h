@@ -42,10 +42,6 @@ public:
 	Relation& difference(const Relation& other, std::string new_rel_name);
 	Relation& cross(const Relation& other, std::string new_rel_name);
 	
-	//** Sort Utility Functions **//
-	void sort_by(std::string primary_key);  // primary_key = name of attribute
-	bool compare_entity(Entity a, Entity b);
-	
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	bool if_temp() const { return temp; } //true for temporary false for static

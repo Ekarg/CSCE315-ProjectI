@@ -90,6 +90,20 @@ void Database::close(int i) {
 	}
 }
 
+void Database::rename_table(std::string rel_name, std::string new_rel_name) {
+	int hold;
+	for (int i = 0; i < vec_relations.size(); ++i) {
+		if (vec_relations[i].get_name() == new_rel_name) {
+			printf("ERROR: Renaming conflict, new name already in use; \n");
+			return;
+		}
+		if (vec_relations[i].get_name() == rel_name) {
+			hold = i;
+		}
+	}
+	vec_relations[hold].set_name(new_rel_name);
+}
+
 void Database::exit() {
 	for (int i = 0; i < vec_relations.size(); ++i) {
 		close(0);

@@ -34,7 +34,15 @@ public:
 	void close(std::string rel_name);	//close relation given relation name
 	void close(int i);					//close relation given index in vec_relations
 	
+	void rename_table(std::string rel_name, std::string new_rel_name);
+	
 	void exit();
+	
+	//** Basic Fetch Functions **//
+	std::string get_name() const { return name; }
+	
+	//** Basic Set Functions **//
+	void set_name(std::string s) { name = s; } 
 	
 
 };

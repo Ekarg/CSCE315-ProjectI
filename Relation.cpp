@@ -94,17 +94,6 @@ Relation& Relation::cross(const Relation& other, std::string new_rel_name) {
 
 }
 
-void Relation::sort_by(std::string primary_key) {
-	for (int i = 0; i < relations_atts.size(); ++i) {
-		if (primary_key == relations_atts[i].get_name()) {
-			//sort based on index of primary key. std::sort(..) work in progress
-			return;
-		}
-	}
-}
-
-
-
 
 
 
