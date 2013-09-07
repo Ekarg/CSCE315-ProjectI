@@ -9,17 +9,21 @@
 
 */
 
-
+#include "stdafx.h"
 #include <string>
 #include "Attribute.h"
 
-void Attribute::display() {
-	std::cout << get_name() << "(" << get_ident() << ")  \t";
-}
+
+Attribute::Attribute(std::string n, int in) {
+	name=n;
+	ident=in;
+ 	}	 
 
 bool operator== (Attribute &a, Attribute &b) {
 	return ( ( a.get_ident() == b.get_ident() ) && ( a.get_name() == b.get_name() ) );
-}
+	}
 
-
-
+void Attribute::display() {
+	std::cout << get_name() << "(" << get_ident() << ")  \t";
+	 }
+	

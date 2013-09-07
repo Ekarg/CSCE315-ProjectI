@@ -10,20 +10,18 @@
 */
 
 
-#ifndef _dbms_
-#define _dbms_
+#ifndef _manager_
+#define _manager_
 
 #include "Database.h"
 
-class dbms {		//interface or system for managing a database
+class Manager {		//interface or system for managing a database
 private:
-	Database d;
-
+	std::vector<Database> d;
+	Database database;
 public: 
-
-	void rename_database(std::string new_dat_name);
-	
-
+	Manager();
+	void setUpDatabase(std::vector<std::string> fileNames);
 };
 
 #endif

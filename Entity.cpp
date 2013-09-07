@@ -9,11 +9,15 @@
 
 */
 
-
+#include "stdafx.h"
 #include <vector>
 #include <string>
 #include <iostream>
 #include "Entity.h"
+
+Entity::Entity(std::vector<std::string> data) {
+	s=data;
+}
 
 void Entity::display() {
 	for(int i = 0; i < s.size(); ++i) {

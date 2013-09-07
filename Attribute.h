@@ -22,8 +22,8 @@ private:
 	// 0 = string, 1 = int, 2 = bool, etc.
 	
 public:
-	
-	
+	Attribute();
+	Attribute(std::string n, int in);
 	//** Display Function **//
 	void display();
 
@@ -34,10 +34,10 @@ public:
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; }
 	void set_ident(int i) { ident = i; }
-	
+
 	//** Overloaded Operators **//
 	friend bool operator== (Attribute &a, Attribute &b);
-	
+
 };
 
 #endif

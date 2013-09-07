@@ -12,6 +12,7 @@
 
 #ifndef _Entity_
 #define _Entity_
+#include <vector>
 
 class Entity { 	//a row of a relation representing an object
 private:
@@ -19,8 +20,8 @@ private:
 	std::vector<std::string> s;
 
 public:
-
-	
+	Entity() {}
+	Entity(std::vector<std::string> data);
 	//** Display Function **//
 	void display();
 	
