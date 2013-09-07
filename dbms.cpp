@@ -18,3 +18,12 @@
 void dbms::rename_database(std::string new_dat_name) {
 	d.set_name(new_dat_name);
 }
+
+
+
+
+
+
+
+
+

@@ -27,3 +27,6 @@ WRITE animals;
 CLOSE animals;
 
 EXIT;
+
+
+

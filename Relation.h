@@ -29,6 +29,7 @@ public:
 
 	//Relation constructor defaults to empty temp table
 	Relation(): temp(1) {}
+	Relation(std::vector<Attribute> a): temp(1), relations_atts(a) {}
 
 	bool create(std::string name_init, std::vector<Attribute> table_attributes);  //returns zero on success; nonzero on failure
 	bool remove(int index); //returns zero on success; nonzero on failure
@@ -41,13 +42,16 @@ public:
 	Relation& uni(const Relation& other, std::string new_rel_name);
 	Relation& difference(const Relation& other, std::string new_rel_name);
 	Relation& cross(const Relation& other, std::string new_rel_name);
+	Relation& projection(std::vector<Attribute> a, std::string new_rel_name);
 	
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
-	bool if_temp() const { return temp; } //true for temporary false for static
+	std::vector<Attribute> get_atts() const { return relations_atts; }
+	bool if_temp() const { return temp; } //true for temporary; false for static
 	
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; } 
+	void set_atts(std::vector<Attribute> a) { relations_atts = a; }
 	void set_temp(bool b) { temp = b; } 
 	
 };

@@ -16,3 +16,10 @@
 void Attribute::display() {
 	std::cout << get_name() << "(" << get_ident() << ")  \t";
 }
+
+bool operator== (Attribute &a, Attribute &b) {
+	return ( ( a.get_ident() == b.get_ident() ) && ( a.get_name() == b.get_name() ) );
+}
+
+
+

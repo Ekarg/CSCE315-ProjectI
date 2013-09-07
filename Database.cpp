@@ -109,3 +109,9 @@ void Database::exit() {
 		close(0);
 	}
 }
+
+
+
+
+
+

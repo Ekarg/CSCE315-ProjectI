@@ -19,6 +19,7 @@ class Attribute {	//a named column of a relation
 private:
 	std::string name;
 	int ident;  //identifier
+	// 0 = string, 1 = int, 2 = bool, etc.
 	
 public:
 	
@@ -33,6 +34,9 @@ public:
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; }
 	void set_ident(int i) { ident = i; }
+	
+	//** Overloaded Operators **//
+	friend bool operator== (Attribute &a, Attribute &b);
 	
 };
 
