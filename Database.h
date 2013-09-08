@@ -26,8 +26,9 @@ public:
 	bool create_table(std::string name_init, std::vector<Attribute> table_attributes, std::vector<std::string> primary_key);
 	//WATDO WITH PRIMARY KEY? HOW WE WANT TO IMPLEMENT?
 	//void update();          ????????????
-	//void insert_into(Relation, ); ????
+	void insert_into(string rel_name, Entity e);
 	void remove(std::string rel_name); 		//remove relation from database
+	bool remove_entity(std::string rel_name, Entity e); 		//remove relation from database
 	void show(std::string rel_name);	//print relation to screen
 	void rename_table(std::string rel_name, std::string new_rel_name);
 	//void remove(std::string name, Expr e); 	//where Expr = parsed expression
@@ -44,7 +45,7 @@ public:
 	
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; } 
-
+	void test();
 
 };
 

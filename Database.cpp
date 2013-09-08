@@ -60,7 +60,7 @@ void Database::remove(std::string rel_name) {
 
 void Database::open(string rel_name) {
 		ifstream tableFile;
-		tableFile.open(rel_name);
+		tableFile.open(rel_name+".txt");
 		string attributes ="";
 		if(tableFile.good())
 			getline(tableFile, attributes);
@@ -144,11 +144,11 @@ void Database::close(int i) {
 void Database::rename_table(std::string rel_name, std::string new_rel_name) {
 	int hold;
 	for (int i = 0; i < vec_relations.size(); ++i) {
-		if (vec_relations[i].get_name() == new_rel_name) {
+		if (vec_relations[i].get_name().compare(new_rel_name)==0) {
 			printf("ERROR: Renaming conflict, new name already in use; \n");
 				return;
 			}
-		if (vec_relations[i].get_name() == rel_name) {
+		if (vec_relations[i].get_name().compare(rel_name)==0) {
 				hold = i;
 			}
 		}
@@ -184,4 +184,43 @@ vector<string> Database::tokenizer(string line) {
 void Database::display() {
 	for(int i=0; i<(int)vec_relations.size(); i++)
 		vec_relations[i].display();
+}
+
+void Database::test() {
+	vector<string> ent;
+	ent.push_back("Hugh");
+	ent.push_back("4");
+	Entity e=Entity(ent);
+	insert_into("animals", e);
+	display();
+
+	vector<string> ent2;
+	ent2.push_back("Sam");
+	ent2.push_back("3");
+	Entity e2=Entity(ent);
+	remove_entity("animals", e2);
+	display();
+
+}
+
+void Database::insert_into(string rel_name, Entity e) {
+	for(int i=0; i<(int)vec_relations.size(); i++)
+	{
+		if(vec_relations[i].get_name().compare(rel_name)==0)
+			vec_relations[i].insert_entity(e);
+	}
+}
+
+bool Database::remove_entity(string rel_name, Entity e) {
+	for(int i=0; i<(int)vec_relations.size(); i++)
+	{
+		if(vec_relations[i].get_name().compare(rel_name)==0)
+		{
+			int index = vec_relations[i].find(e);
+			if(index == -1)
+				return false;
+			return vec_relations[i].remove(index);
+		}
+	}
+	return false;
 }

@@ -27,7 +27,7 @@ public:
 	
 	//** Basic Fetch Functions **//
 	std::string get_elem(int index) const { return s[index]; }
-	
+	std::vector<std::string> getData();
 	//** Basic Set Functions **//
 	void insert_elem(std::string value, int index) { s[index] = value; }
 	

@@ -26,4 +26,8 @@ void Entity::display() {
 	std::cout << std::endl;
 }
 
+std::vector<std::string> Entity::getData() {
+	return s;
+}
+
 

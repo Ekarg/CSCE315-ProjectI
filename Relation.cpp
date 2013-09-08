@@ -33,6 +33,27 @@ bool Relation::remove(int index) {
 	return 0;
 }
 
+int Relation::find(Entity e) {
+	for(int i=0; i<(int)relations_ents.size(); i++)
+	{
+		bool equal = true;
+		vector<string> elem = e.getData();
+		vector<string> elem2 = relations_ents[i].getData();
+		for(int j=0; j<(int)elem.size(); j++)
+		{
+			if(elem[j].compare(elem2[j])!=0)
+			{
+				equal = false;
+			}
+		}
+		if(equal)
+		{
+			return --i;
+		}
+	}
+	return -1;
+}
+
 bool Relation::insert_entity(const Entity &e) {
 	//check to ensure entity should belong in table
 	relations_ents.push_back(e);
@@ -116,13 +137,13 @@ Relation& Relation::projection(std::vector<Attribute> a, std::string new_rel_nam
 	r->set_atts(a);
 		
 	//create number of blank entities
-	for (int m = 0; m < relations_ents.size(); ++m) {
+	for (int m = 0; m < (int)relations_ents.size(); ++m) {
 		Entity e;
 		r->insert_entity(e);
 	}
 	//finds matching column and copies over elements by update()
 	for (int i = 0; i < a.size(); ++i) {
-		for (int j = 0; j < this->relations_atts.size(); ++j) {
+		for (int j = 0; j < (int)relations_atts.size(); ++j) {
 			if (a[i] == relations_atts[j]) {
 				for (int k = 0; k < relations_ents.size(); ++k) {
 				//update entity with 
@@ -149,6 +170,7 @@ void Relation::display() {
 	for(int i=0; i<(int)relations_ents.size(); i++){
 		relations_ents[i].display();
 	}
+	cout<<"\n";
 }
 
 

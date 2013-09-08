@@ -23,7 +23,7 @@ Manager::Manager() {
 void Manager::setUpDatabase(vector<string> fileNames) {
 	for(int i=0; i<(int)fileNames.size(); i++)
 	{
-		string name = fileNames[i]+".txt";
+		string name = fileNames[i];
 	//	cout<<name;
 		database.open(name);
 	}
@@ -34,5 +34,6 @@ void Manager::print() {
 }
 
 
-
-
+void Manager::test() {
+	database.test();
+}

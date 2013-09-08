@@ -51,7 +51,7 @@ public:
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	bool if_temp() const { return temp; } //true for temporary false for static
-	
+	int find(Entity e);
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; } 
 	void set_temp(bool b) { temp = b; } 
