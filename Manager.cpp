@@ -29,6 +29,10 @@ void Manager::setUpDatabase(vector<string> fileNames) {
 	}
 }
 
+void Manager::print() {
+	database.display();
+}
+
 
 
 

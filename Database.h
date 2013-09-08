@@ -38,7 +38,7 @@ public:
 	void close(int i);					//close relation given index in vec_relations
 	vector<string> tokenizer(string line);
 	void exit();
-	
+	void display();
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	

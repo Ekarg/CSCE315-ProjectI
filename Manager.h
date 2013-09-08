@@ -22,6 +22,7 @@ private:
 public: 
 	Manager();
 	void setUpDatabase(std::vector<std::string> fileNames);
+	void print();
 };
 
 #endif

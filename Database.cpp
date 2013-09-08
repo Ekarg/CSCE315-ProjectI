@@ -96,15 +96,16 @@ void Database::open(string rel_name) {
 		string s =" ";
 		int numFields = attributes.size();
 		vector<Entity> entities;
+		Relation r;
+		r.create(rel_name, attr, keyData);
 		while(tableFile.good())
 		{
 			getline(tableFile, s);
 			vector<string> tokensData = tokenizer(s);	
 			Entity e=Entity(tokensData);
-			entities.push_back(e);
+			r.insert_entity(e);
 		}
-		create_table(rel_name, attr, keyData);
-		//vec_relations.push_back(r);
+		vec_relations.push_back(r);
 }
 
 void Database::write(string rel_name) {
@@ -178,4 +179,9 @@ vector<string> Database::tokenizer(string line) {
 	}
 	return tokens;
 
+}
+
+void Database::display() {
+	for(int i=0; i<(int)vec_relations.size(); i++)
+		vec_relations[i].display();
 }

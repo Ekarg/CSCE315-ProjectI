@@ -38,6 +38,7 @@ public:
 	void update(); //update single entity** maybe idk
 	void show();
 	void open(std::string name);
+	void display();
 	std::vector<Attribute> get_atts() const { return relations_atts; }
 	Relation& uni(const Relation& other, std::string new_rel_name);
 	Relation& difference(const Relation& other, std::string new_rel_name);

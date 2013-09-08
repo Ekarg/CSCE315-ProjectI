@@ -29,7 +29,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	Manager m= Manager();
 	m.setUpDatabase(fileNames);
-	
+	m.print();
 	return 0;
 }
 

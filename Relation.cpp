@@ -135,5 +135,20 @@ Relation& Relation::projection(std::vector<Attribute> a, std::string new_rel_nam
 
 }
 
+void Relation::display() {
+	for(int i=0; i<(int)relations_atts.size();i++)
+		cout<<relations_atts[i].get_name()<<'\t';
+	cout<<"\n";
+	for(int i=0; i<(int)relations_atts.size(); i++)
+	{
+		for(int j=0; j<relations_atts[i].get_name().length(); j++)
+			cout<<"=";
+		cout<<"\t";
+	}
+	cout<<"\n";
+	for(int i=0; i<(int)relations_ents.size(); i++){
+		relations_ents[i].display();
+	}
+}
 
 
