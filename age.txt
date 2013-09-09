@@ -1,0 +1,5 @@
+Attributes: gender 0 age 1
+Key: age
+female 1
+male 5 
+female 8

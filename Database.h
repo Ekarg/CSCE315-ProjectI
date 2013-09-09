@@ -31,6 +31,13 @@ public:
 	bool remove_entity(std::string rel_name, Entity e); 		//remove relation from database
 	void show(std::string rel_name);	//print relation to screen
 	void rename_table(std::string rel_name, std::string new_rel_name);
+	void select(std::string rel_name, std::string new_rel, Attribute attributes, std::string values);
+	void projection(std::vector<Attribute> attr,std::string rel_nam, std::string new_name);
+	void rename(std::string rel_name, std::string old_att_name, std::string new_att_name);
+	void uni(string rel_name1, string rel_name2, string new_name);
+	void difference(string rel_name1, string rel_name2, string new_name);
+	void cross(string rel_name1, string rel_name2, string new_name);
+	void update(string rel_name, Entity old, Entity new_e);
 	//void remove(std::string name, Expr e); 	//where Expr = parsed expression
 	//void show(std::string rel_name);			//show elements in relation that match atomic expression
 	void open(std::string rel_name); 	//opens relation
@@ -40,6 +47,7 @@ public:
 	vector<string> tokenizer(string line);
 	void exit();
 	void display();
+	void display(string rel_name);
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	

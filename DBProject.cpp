@@ -28,10 +28,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		fileNames.push_back(str);
 	}
 	Manager m= Manager();
-	m.setUpDatabase(fileNames);
-	m.print();
-
-
 	m.test();
 
 

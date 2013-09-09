@@ -1,5 +1,7 @@
 Attributes: name 1 id 2 type 0
 Key: id 
-Bob 1 lion
+Kyle 100 seal
 Kelly 2 tiger
-Sam 3 bear
+Sam 335 bear
+Bob 1 lion
+Luis 9 turtle

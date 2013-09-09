@@ -21,6 +21,15 @@ bool Relation::create(std::string name_init, std::vector<Attribute> table_attrib
 	name = name_init;
 	relations_atts = table_attributes;
 	keys=key_list;
+	for(int i=0; i<(int)keys.size(); i++)
+	{
+		for(int j=0; j<(int)relations_atts.size(); j++)
+			if(keys[i].compare(relations_atts[j].get_name())==0)
+			{
+				key_indices.push_back(j);
+				break;
+			}
+	}
 	return 0;
 }
 
@@ -48,26 +57,44 @@ int Relation::find(Entity e) {
 		}
 		if(equal)
 		{
-			return --i;
+			return i;
 		}
 	}
 	return -1;
 }
 
-bool Relation::insert_entity(const Entity &e) {
+bool Relation::insert_entity(Entity e) {
 	//check to ensure entity should belong in table
+	vector<string> data=e.getData();
+	for(int i=0; i<(int) relations_ents.size(); i++)
+	{
+		vector<string> cur_data=relations_ents[i].getData();
+		for(int j=0; j<key_indices.size(); j++){
+			if(data[key_indices[j]].compare(cur_data[key_indices[j]])==0)
+				return false;
+		}
+	}
+
 	relations_ents.push_back(e);
-	return 0;
+	return true;
 }
 
-void Relation::select() {
-
-
-}
-
-void Relation::update() {
-
-
+vector<Entity> Relation::select(Attribute a, string value) {
+	int index = 0;
+	for(int i=0; i<(int)relations_atts.size(); i++)
+		if(relations_atts[i].get_name().compare(a.get_name())==0)
+		{
+			index=i;
+			break;
+		}
+	vector<Entity> match;
+	for(int i=0 ; i<(int)relations_ents.size(); i++)
+	{
+		vector<string> data = relations_ents[i].getData();
+		if(data[index].compare(value)==0)
+			match.push_back(relations_ents[i]);
+	}
+	return match;
 }
 
 void Relation::show() {
@@ -84,7 +111,7 @@ Relation& Relation::uni(const Relation& other, std::string new_rel_name) {
 		printf("ERROR: Union Table Name Conflict (Thrown from Relation:uni(); \n");
 	}
 	Relation *r = new Relation();
-	r->get_name() = new_rel_name;
+	r->set_name(new_rel_name);
 	r->set_atts(this->get_atts());
 	for(int i = 0; i < (int) this->relations_ents.size(); ++i) {
 		r->insert_entity(this->relations_ents[i]);
@@ -133,9 +160,33 @@ Relation& Relation::projection(std::vector<Attribute> a, std::string new_rel_nam
 		printf("ERROR: Projection Table Name Conflict; \n");
 	}
 	Relation *r = new Relation();
-	r->get_name() = new_rel_name;
+	r->set_name(new_rel_name);
 	r->set_atts(a);
-		
+
+	vector<int> indices;
+	for(int i=0; i< (int)a.size(); i++)
+	{
+		for(int j=0; j<(int)relations_atts.size(); j++)
+		{
+			if(a[i].get_name().compare(relations_atts[j].get_name())==0)
+			{
+				indices.push_back(j);
+				break;
+			}
+		}
+	}
+	vector<Entity> entities;
+	for(int i=0; i<(int)relations_ents.size(); i++)
+	{
+		vector<string> data = relations_ents[i].getData();
+		vector<string> new_data;
+		for(int j=0; j<(int)indices.size(); j++)
+			new_data.push_back(data[indices[j]]);
+		Entity e = Entity(new_data);
+		entities.push_back(e);
+	}
+	r->relations_ents=entities;
+	/*	
 	//create number of blank entities
 	for (int m = 0; m < (int)relations_ents.size(); ++m) {
 		Entity e;
@@ -151,12 +202,14 @@ Relation& Relation::projection(std::vector<Attribute> a, std::string new_rel_nam
 			}
 		}
 	}
+	*/
 	return (*r);
 
 
 }
 
 void Relation::display() {
+	cout<<"Relation: "<<name<<"\n";
 	for(int i=0; i<(int)relations_atts.size();i++)
 		cout<<relations_atts[i].get_name()<<'\t';
 	cout<<"\n";
@@ -171,6 +224,12 @@ void Relation::display() {
 		relations_ents[i].display();
 	}
 	cout<<"\n";
+}
+
+void Relation::rename(string old, string new_name) {
+	for(int i=0; i<(int) relations_atts.size(); i++)
+		if(relations_atts[i].get_name().compare(old)==0)
+			relations_atts[i].set_name(new_name);
 }
 
 
