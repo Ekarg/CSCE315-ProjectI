@@ -1,19 +1,19 @@
 <NotepadPlus>
     <Session activeView="1">
-        <mainView activeIndex="4">
+        <mainView activeIndex="2">
             <File firstVisibleLine="0" xOffset="0" scrollWidth="776" startPos="0" endPos="0" selMode="0" lang="Normal Text" encoding="-1" filename="Z:\db\dbreadin.txt" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="176" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\dbmain.cpp" />
-            <File firstVisibleLine="0" xOffset="0" scrollWidth="552" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\dbms.cpp" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="552" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\CSCE315-ProjectI\Manager.cpp" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="816" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Database.cpp" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="584" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Relation.cpp" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Attribute.cpp" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Entity.cpp" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="Makefile" encoding="-1" filename="Z:\db\makefile" />
         </mainView>
-        <subView activeIndex="2">
-            <File firstVisibleLine="0" xOffset="0" scrollWidth="520" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\dbms.h" />
-            <File firstVisibleLine="0" xOffset="0" scrollWidth="992" startPos="203" endPos="203" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Database.h" />
-            <File firstVisibleLine="11" xOffset="0" scrollWidth="1016" startPos="366" endPos="366" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Relation.h" />
+        <subView activeIndex="0">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="520" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\CSCE315-ProjectI\Manager.h" />
+            <File firstVisibleLine="15" xOffset="0" scrollWidth="992" startPos="203" endPos="203" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Database.h" />
+            <File firstVisibleLine="14" xOffset="0" scrollWidth="1296" startPos="672" endPos="672" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Relation.h" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="520" startPos="0" endPos="0" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Attribute.h" />
             <File firstVisibleLine="0" xOffset="0" scrollWidth="576" startPos="270" endPos="270" selMode="0" lang="C++" encoding="-1" filename="Z:\db\Entity.h" />
         </subView>
