@@ -30,7 +30,7 @@ public:
 	void insertOne(string rel_name, vector<string> data);
 	void insertFrom(string target, string source);
 	void exit();
-	bool remove_entity(string rel_name, Entity e); 		//remove relation from database
+	bool remove_things(string rel_name, std::string s); 		//remove entities from database
 	void update(string rel_name, Entity old, Entity new_e);
 	void write(string rel_name);
 

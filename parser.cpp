@@ -141,6 +141,7 @@ bool Parser::validate(string input) {
 					expr += tokens[i];
 				}
 				cout << "expr == " << expr << endl;
+				manager.insertFrom(rel_name, expr);
 				//parse_expr(expr);
 				//union(table1, table2);
 			}
@@ -174,9 +175,7 @@ bool Parser::validate(string input) {
 					}
 					cout << args[k] << endl;
 				}
-				//create entity with values from args
-				//check if entity is allowable into table rel_name
-				//insert entity into tablr rel_name
+				manager.insertOne(rel_name, args);
 			}
 			printf("Insert command parsed.\n\n");
 
@@ -205,6 +204,7 @@ bool Parser::validate(string input) {
 		printf("Delete command parsed.\n\n");
 
 		//Call manager function
+		manager.remove_things(rel_name, expr);
 
 		return true; 
 	}
@@ -251,7 +251,12 @@ bool Parser::validate(string input) {
 		printf("Update command parsed.\n\n");
 
 		//Call manager function
-
+		//manager.update(tokens[1], ); 
+		//THERE'S LIKE ONLY ONE EXAMPLE OF THIS COMMAND
+		//BEING USED IN ANY OF THE EXAMPLE COMMANDS
+		//NOT SURE IF UPDATING A SINGLE ENTITY OR
+		//UPDATING A SINGLE ATTRIBUTE IN EACH ENTITY IN
+		//A RELATION WHERE A SPECIFIC CONDITION IS MET
 		return true; 
 	}
 	else if(show.compare(first) == 0)

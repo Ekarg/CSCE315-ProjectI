@@ -40,42 +40,54 @@ void Manager::test() {
 
 
 // Wes
-void Manager::insertOne(string rel_name, vector<string> data)
+void Manager::insertOne(string rel_name, vector<string> data) //Command : INSERT INTO dots VALUES FROM (0, 0, "X");;
 {
-
-
+	Entity *e = new Entity(data);
+	database.insert_into(rel_name, *e);
+	//init e on heap -> insert into rel_name
 
 }
 
-void Manager::insertFrom(string target, string source)
+void Manager::insertFrom(string rel_name, std::string expr)
 {
-
-
-
+	//NOT FINISHED :------------------------------------------:
+	//parse expr into a relation
+	//take union of two relations. 
+	//all elements in A and all elements in B
 }
 
-void Manager::exit() 
+void Manager::exit() //Command : EXIT;
 {
 	database.exit();
 	//database.exit() calls database.close(int i) for each table in
 	//database that isn't temp
 }
 
-bool Manager::remove_entity(string rel_name, Entity e) 		//remove relation from database
+bool Manager::remove_things(string rel_name, std::string expr) //Command : DELETE FROM XXX WHERE XXX;
 {
-
+	//NOT FINISHED :------------------------------------------:
+	//parse expr into a relation
+	//take difference of two relations. 
+	// all elements in A that aren't also in B
+	Entity e;
+	database.remove_entity(rel_name, e);
 	return false;
 }
 
 void Manager::update(string rel_name, Entity old, Entity new_e)
-{
-
-
+{   
+	//NOT FINISHED :------------------------------------------:
+	//THERE'S LIKE ONLY ONE EXAMPLE OF THIS COMMAND
+	//BEING USED IN ANY OF THE EXAMPLE COMMANDS
+	//NOT SURE IF UPDATING A SINGLE ENTITY OR
+	//UPDATING A SINGLE ATTRIBUTE IN EACH ENTITY IN
+	//A RELATION WHERE A SPECIFIC CONDITION IS MET
 }
 
-void Manager::write(string rel_name)
+void Manager::write(string rel_name) //Command : WRITE XXX;
 {
 	database.write(rel_name);
+	//simple enough, eh?
 
 }
 
