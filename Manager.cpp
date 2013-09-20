@@ -56,15 +56,13 @@ void Manager::insertFrom(string target, string source)
 
 void Manager::exit() 
 {
-
-
-
-
+	database.exit();
+	//database.exit() calls database.close(int i) for each table in
+	//database that isn't temp
 }
 
 bool Manager::remove_entity(string rel_name, Entity e) 		//remove relation from database
 {
-
 
 	return false;
 }
@@ -77,8 +75,7 @@ void Manager::update(string rel_name, Entity old, Entity new_e)
 
 void Manager::write(string rel_name)
 {
-
-
+	database.write(rel_name);
 
 }
 

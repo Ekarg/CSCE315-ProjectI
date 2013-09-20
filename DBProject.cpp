@@ -14,7 +14,7 @@
 #include "Database.h"
 #include "Manager.h"
 #include "Relation.h"
-
+#include "parser.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -32,7 +32,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	m.test();
 	*/
 	
-	/* Accepts input from a text file and tests the commands 
+	// Accepts input from a text file and tests the commands 
 	string line;
 	ifstream input("testInput.txt"); //input -- Make sure this is in the current folder
 	ofstream output ("output.txt"); //output
@@ -63,7 +63,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		output.close();
 	}
 
-	*/
+	
 	while (true) {
 		cout<<"\n\nPlease input Command\n";
 		string input;

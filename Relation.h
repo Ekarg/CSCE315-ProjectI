@@ -55,6 +55,8 @@ public:
 	
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
+	std::vector<Entity> get_rel_ents() const { return relations_ents; }
+	std::vector<Attribute> get_rel_atts() const { return relations_atts; }
 	bool if_temp() const { return temp; } //true for temporary false for static
 	int find(Entity e);
 	//** Basic Set Functions **//

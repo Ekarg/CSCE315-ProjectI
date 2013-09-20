@@ -16,6 +16,8 @@
 #include "Database.h"
 #include <iostream>
 #include <fstream>
+#include "Entity.h"
+#include "time.h"
 using namespace std;
 
 bool Database::create_table(string name_init, vector<Attribute> table_attributes, 
@@ -109,8 +111,41 @@ void Database::open(string rel_name) {
 }
 
 void Database::write(string rel_name) {
+	//COMPILES BUT UNTESTED UNTIL EVERYTHING IS FULLY INTEGRATED
+	int rel_index = -1;
+	for (int i = 0; i < vec_relations.size(); ++i) {
+		if (rel_name == vec_relations[i].get_name()) {
+			rel_index = i;
+		}
+	}
+	if (rel_index == -1) {
+		printf("ERROR : Could not write nonexistent relation;\n");
+		return;
+	}
+	std::string rel_filename = rel_name + ".txt";
+	ofstream os(rel_filename);
 
-
+	std::vector<Attribute> atts = vec_relations[rel_index].get_rel_atts();
+	os << "Attributes: ";
+	for (int q = 0; q < atts.size(); ++q) {
+		os << atts[q].get_name() << ' ' << atts[q].get_ident() << ' ';
+	}
+	os << '\n';
+	//GRACE : IF YOU'RE READING THIS, YOU'RE IN THE RIGHT PLACE!!
+	srand(time(NULL));
+	os << "Key: " << atts[( rand()%atts.size() )].get_name() << '\n';
+	//GRACE : IF YOU'RE READING THIS, I CLEARLY HAVE NO IDEA WHAT I'M DOING!!
+	//GRACE : SORRY!! -WES
+	std::vector<Entity> ents = vec_relations[rel_index].get_rel_ents();
+	for (int j = 0; j < ents.size(); ++j) {
+		std::vector<std::string> temp = ents[j].getData();
+		for (int k = 0; k < temp.size(); ++k) {
+			os << temp[k] << ' ';
+		}
+		os <<'\n';
+	}
+	os << '\n';
+	os.close();
 }
 
 void Database::close(string rel_name) {
@@ -158,7 +193,7 @@ void Database::rename_table(std::string rel_name, std::string new_rel_name) {
 
 void Database::exit() {
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
-		close(0);
+		close(i);
 	}
 }
 

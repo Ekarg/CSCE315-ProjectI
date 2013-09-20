@@ -121,7 +121,6 @@ bool Parser::validate(string input) {
 	else if(exit.compare(first) == 0)
 	{
 		printf("Exit command parsed.\n\n");
-		// exit();
 
 		//Call manager function
 		manager.exit();
@@ -167,6 +166,12 @@ bool Parser::validate(string input) {
 					args.push_back(a);
 				}
 				for (int k = 0; k < args.size(); ++k) {
+					if (args[k][args[k].size()-1] == '"') {
+						args[k].erase(args[k].end()-1);
+					}
+					if (args[k][args[k].size()-1] == ';') {
+						args[k].erase(args[k].end()-1);
+					}
 					cout << args[k] << endl;
 				}
 				//create entity with values from args
