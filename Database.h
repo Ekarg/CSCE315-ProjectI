@@ -19,7 +19,8 @@ class Database {	//a collection of relations
 private:
 	std::string name;
 	std::vector<Relation> vec_relations;
-
+	Relation temp; //this Relation is the Relation that stores the result of a query
+	Relation temp2; //this Relation is the Relation that stores the result of a query
 public:
 
 	//returns zero on success; nonzero on failure
@@ -32,8 +33,9 @@ public:
 	void show(std::string rel_name);	//print relation to screen
 	void rename_table(std::string rel_name, std::string new_rel_name);
 	void select(std::string rel_name, std::string new_rel, Attribute attributes, std::string values);
-	void projection(std::vector<Attribute> attr,std::string rel_nam, std::string new_name);
+	bool projection(std::vector<string> attr,std::string rel_nam, std::string new_name);
 	void rename(std::string rel_name, std::string old_att_name, std::string new_att_name);
+	void rename(std::string rel_name, int old_att_name, std::string new_att_name);
 	void uni(string rel_name1, string rel_name2, string new_name);
 	void difference(string rel_name1, string rel_name2, string new_name);
 	void cross(string rel_name1, string rel_name2, string new_name);
@@ -48,6 +50,7 @@ public:
 	void exit();
 	void display();
 	void display(string rel_name);
+	void insertNewRelation(string name);
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	std::vector<Relation> get_rel() const { return vec_relations; }

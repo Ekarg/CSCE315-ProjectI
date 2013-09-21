@@ -34,13 +34,14 @@ public:
 	bool create(std::string name_init, std::vector<Attribute> table_attributes, std::vector<std::string> key_list);  //returns zero on success; nonzero on failure
 	bool remove(int index); //returns zero on success; nonzero on failure
 	bool insert_entity(Entity e); //returns zero on success; nonzero on failure
-	Relation& projection(std::vector<Attribute> a, std::string new_rel_name);
+	Relation& projection(std::vector<string> a, std::string new_rel_name);
 	//void select();
 	//void update(Entity old, Entity new_e); //update single entity** maybe idk
 	void show();
 	void open(std::string name);
 	void display();
 	void rename(string old, string new_name);
+	void rename(int old, string new_name);
 	std::vector<Attribute> get_atts() const { return relations_atts; }
 	std::vector<std::string> get_keys() const {return keys; }
 	std::vector<Entity> get_data() const {return relations_ents; }

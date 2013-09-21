@@ -20,6 +20,12 @@ Manager::Manager() {
 
 }
 
+void Manager::insertNewRelation (string name) 
+{
+	database.insertNewRelation(name);
+}
+
+
 void Manager::setUpDatabase(vector<string> fileNames) {
 	for(int i=0; i<(int)fileNames.size(); i++)
 	{
@@ -124,13 +130,12 @@ void Manager::select(string rel_name, string new_rel, Attribute attributes, std:
 
 }
 
-void Manager::projection(vector<Attribute> attr,string rel_nam, string new_name)
+bool Manager::projection(vector<string> attr,string rel_name, string new_name)
 {
-
-
+	return database.projection(attr, rel_name, new_name);
 }
 
-void Manager::rename(string rel_name, string old_att_name, string new_att_name)
+void Manager::rename(string rel_name, int old_att_name, string new_att_name)
 {
 
 
