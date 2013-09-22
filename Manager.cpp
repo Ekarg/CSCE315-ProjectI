@@ -94,27 +94,22 @@ void Manager::write(string rel_name) //Command : WRITE XXX;
 //Sid
 void Manager::createTable(string rel_name, vector<Attribute> attributes, vector<string> keys) 
 {
-
-
+	database.create_table(rel_name, attributes, keys);
 }
 
 void Manager::open(string rel_name)
 {
-
-
-
+	database.open(rel_name);
 }
 
 void Manager::close(string rel_name)
 {
-
-
+	database.close(rel_name);
 }
 
 void Manager::show(string rel_name) 
 {
-
-
+	database.show(rel_name);
 }
 
 //Grace 
