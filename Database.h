@@ -54,6 +54,7 @@ public:
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	std::vector<Relation> get_rel() const { return vec_relations; }
+	Relation find_rel(std::string s); 
 	
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; } 

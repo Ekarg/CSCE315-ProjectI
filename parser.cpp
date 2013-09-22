@@ -170,9 +170,8 @@ bool Parser::validate(string input) {
 					expr += tokens[i];
 				}
 				cout << "expr == " << expr << endl;
-				manager.insertFrom(rel_name, expr);
-				//parse_expr(expr);
-				//union(table1, table2);
+				handleQuery(expr);
+				manager.insertFrom(rel_name);
 			}
 			// Case for "INSERT INTO dots VALUES FROM (0, 0, 0);"
 			else {
@@ -228,12 +227,15 @@ bool Parser::validate(string input) {
 		// TO BE PARSED RECURSIVELY INTO A TABLE AND THEN SUBTRACTED FROM
 		// THE THE TABLE rel_name. ASSUMED ERROR CATCHING FOR EXPRESSION PASRING
 		// TO BE HANDLED IN parse_expr. ??????????????????????????????
-		// parse_expr(expr);
-		// difference(table1, table2);
+		if (!handleQuery(expr)) {
+			printf("Invalid Expression in delete command;\n");
+			return false;
+		}
+		//difference(table1, table2);
 		printf("Delete command parsed.\n\n");
 
 		//Call manager function
-		manager.remove_things(rel_name, expr);
+		manager.remove_things(rel_name);
 
 		return true; 
 	}

@@ -28,9 +28,9 @@ public:
 	//Functions to be called from parser if commands inputed by the user is valid
 	//Wes
 	void insertOne(string rel_name, vector<string> data);
-	void insertFrom(string target, string source);
+	void insertFrom(string rel_name);
 	void exit();
-	bool remove_things(string rel_name, std::string s); 		//remove entities from database
+	bool remove_things(string rel_name); 		//remove entities from database
 	void update(string rel_name, Entity old, Entity new_e);
 	void write(string rel_name);
 

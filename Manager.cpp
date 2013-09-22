@@ -54,12 +54,18 @@ void Manager::insertOne(string rel_name, vector<string> data) //Command : INSERT
 
 }
 
-void Manager::insertFrom(string rel_name, std::string expr)
+void Manager::insertFrom(string rel_name)
 {
-	//NOT FINISHED :------------------------------------------:
-	//parse expr into a relation
-	//take union of two relations. 
-	//all elements in A and all elements in B
+	//I won't lie, this function is not very robust. 
+	//temp is created from handleQuery() called in the parser where this is called
+	//This design feels poor and this function shouldn't be called anywhere without
+	//first being prefaced with handleQuery();
+	vector<Entity> temp = database.find_rel("temp").get_rel_ents();
+	for (int i = 0; i < temp.size(); ++i) {
+		Entity e = temp[i];
+		database.insert_into(rel_name, e);
+	}
+	return;
 }
 
 void Manager::exit() //Command : EXIT;
@@ -69,15 +75,15 @@ void Manager::exit() //Command : EXIT;
 	//database that isn't temp
 }
 
-bool Manager::remove_things(string rel_name, std::string expr) //Command : DELETE FROM XXX WHERE XXX;
+bool Manager::remove_things(string rel_name) //Command : DELETE FROM XXX WHERE XXX;
 {
-	//NOT FINISHED :------------------------------------------:
-	//parse expr into a relation
-	//take difference of two relations. 
-	// all elements in A that aren't also in B
-	Entity e;
-	database.remove_entity(rel_name, e);
-	return false;
+	//READ COMMENTS IN insertFrom();
+	vector<Entity> temp = database.find_rel("temp").get_rel_ents();
+	for (int i = 0; i < temp.size(); ++i) {
+		Entity e = temp[i];
+		database.remove_entity(rel_name, e);
+	}
+	return true;
 }
 
 void Manager::update(string rel_name, Entity old, Entity new_e)

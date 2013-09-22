@@ -531,3 +531,15 @@ void Database::update(string rel_name, Entity old, Entity new_e){
 
 
 }
+
+
+Relation Database::find_rel(std::string s) {
+	for (int i = 0; i < vec_relations.size(); ++i) {
+		if (vec_relations[i].get_name() == s) {
+			return vec_relations[i];
+		}
+	}
+	//THIS CASE SHOULD NEVER HAPPEN
+	Relation r;
+	return r;
+}
