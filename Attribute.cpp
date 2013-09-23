@@ -8,14 +8,20 @@
     This file contains the function definitions for the class "Attribute".
 
 */
-
-#include "stdafx.h"
-#include <string>
 #include "Attribute.h"
 
-
-Attribute::Attribute(std::string n, int in) {
+Attribute::Attribute(std::string n, int in) throw (InvalidType, EmptyName){
+	while(!n.empty()) //strip space
+	{
+		if(n.at(0) == ' ')
+			n.erase(0,0);
+		else
+			break;
+	}
+	if(n.empty()) throw EmptyName();
 	name=n;
+	
+	if( in > 5 || in < 0) throw InvalidType();
 	ident=in;
  	}	 
 

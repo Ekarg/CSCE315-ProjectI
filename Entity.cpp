@@ -9,10 +9,6 @@
 
 */
 
-#include "stdafx.h"
-#include <vector>
-#include <string>
-#include <iostream>
 #include "Entity.h"
 
 Entity::Entity(std::vector<std::string> data) {
@@ -25,7 +21,12 @@ void Entity::display() {
 	}
 	std::cout << std::endl;
 }
-
+string Entity::get_elem(int index) const throw(InvalidIndex)
+{
+	if(index >= s.size()) throw InvalidIndex();
+	
+	return s.at(index);
+}
 std::vector<std::string> Entity::getData() {
 	return s;
 }

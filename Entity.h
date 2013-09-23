@@ -12,7 +12,8 @@
 
 #ifndef _Entity_
 #define _Entity_
-#include <vector>
+
+#include "stdafx.h"
 
 class Entity { 	//a row of a relation representing an object
 private:
@@ -20,13 +21,20 @@ private:
 	std::vector<std::string> s;
 
 public:
+	class InvalidIndex : public RuntimeException
+	{
+		public:
+			InvalidIndex() : RuntimeException("No data in that row")
+			{}
+	};
 	Entity() {}
-	Entity(std::vector<std::string> data);
+	Entity(vector<string> data);
 	//** Display Function **//
 	void display();
 	
 	//** Basic Fetch Functions **//
-	std::string get_elem(int index) const { return s[index]; }
+	string get_elem(int index) const throw (InvalidIndex);
+	//{ return s[index]; }
 	std::vector<std::string> getData();
 	//** Basic Set Functions **//
 	void insert_elem(std::string value, int index) { s[index] = value; }

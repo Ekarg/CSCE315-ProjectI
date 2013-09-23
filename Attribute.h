@@ -13,17 +13,30 @@
 #ifndef _Attribute_
 #define _Attribute_
 
-#include <iostream>
+#include "stdafx.h"
 
 class Attribute {	//a named column of a relation
 private:
 	std::string name;
 	int ident;  //identifier
-	// 0 = string, 1 = int, 2 = bool, etc.
+	// 0 = INT, 1 = FLOAT, 2 = CHAR(n) 3 = VARCHAR(n)
+	// 4 = DATE 5 = TIME
 	
 public:
+	class InvalidType : public RuntimeException
+	{
+		public:
+			InvalidType() : RuntimeException("Cannot create, invalid type") {}
+	};
+	
+	class EmptyName : public RuntimeException 
+	{
+		public:
+			EmptyName() : RuntimeException("Pleas type the attribute name") {}
+	};
+	
 	Attribute();
-	Attribute(std::string n, int in);
+	Attribute(std::string n, int in) throw (InvalidType, EmptyName);
 	//** Display Function **//
 	void display();
 
