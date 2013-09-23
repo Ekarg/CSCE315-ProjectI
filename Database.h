@@ -19,10 +19,10 @@ class Database {	//a collection of relations
 private:
 	std::string name;
 	std::vector<Relation> vec_relations;
+
+public:
 	Relation temp; //this Relation is the Relation that stores the result of a query
 	Relation temp2; //this Relation is the Relation that stores the result of a query
-public:
-
 	//returns zero on success; nonzero on failure
 	bool create_table(std::string name_init, std::vector<Attribute> table_attributes, std::vector<std::string> primary_key);
 	//WATDO WITH PRIMARY KEY? HOW WE WANT TO IMPLEMENT?
@@ -39,7 +39,7 @@ public:
 	void uni(string rel_name1, string rel_name2, string new_name);
 	void difference(string rel_name1, string rel_name2, string new_name);
 	void cross(string rel_name1, string rel_name2, string new_name);
-	void update(string rel_name, Entity old, Entity new_e);
+	void update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck);
 	//void remove(std::string name, Expr e); 	//where Expr = parsed expression
 	//void show(std::string rel_name);			//show elements in relation that match atomic expression
 	void open(std::string rel_name); 	//opens relation
@@ -51,6 +51,7 @@ public:
 	void display();
 	void display(string rel_name);
 	void insertNewRelation(string name);
+	void insertNewRelation(Relation r);
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name; }
 	std::vector<Relation> get_rel() const { return vec_relations; }

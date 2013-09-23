@@ -30,7 +30,7 @@ bool Relation::create(std::string name_init, std::vector<Attribute> table_attrib
 				break;
 			}
 	}
-	return 0;
+	return true;
 }
 
 //Removes an entity from relations_ents 
@@ -68,11 +68,14 @@ bool Relation::insert_entity(Entity e) {
 	vector<string> data=e.getData();
 	for(int i=0; i<(int) relations_ents.size(); i++)
 	{
+		int numConflicts = 0;
 		vector<string> cur_data=relations_ents[i].getData();
 		for(int j=0; j<key_indices.size(); j++){
 			if(data[key_indices[j]].compare(cur_data[key_indices[j]])==0)
-				return false;
+				numConflicts++;
 		}
+		if(numConflicts == key_indices.size()) //if the number of conflicts is equal to the number of keys
+			return false;
 	}
 
 	relations_ents.push_back(e);
@@ -85,13 +88,25 @@ vector<Entity> Relation::select(Attribute a, string value) {
 		if(relations_atts[i].get_name().compare(a.get_name())==0)
 		{
 			index=i;
+			//cout<<"1\n";
 			break;
 		}
+		
+	char* next = NULL;
+	char* str = new char[value.length()+1];
+	vector<string> tokens;
+	for(int i=0; i<(int)value.length(); i++)
+		str[i]=value.at(i);
+	str[value.length()]=NULL;
+	char * start = NULL;
+	start = strtok_s(str, "\"", &next);
+	string s(start);
+	//cout<<s;
 	vector<Entity> match;
 	for(int i=0 ; i<(int)relations_ents.size(); i++)
 	{
 		vector<string> data = relations_ents[i].getData();
-		if(data[index].compare(value)==0)
+		if(data[index].compare(s)==0)
 			match.push_back(relations_ents[i]);
 	}
 	return match;
@@ -164,8 +179,9 @@ Relation& Relation::projection(std::vector<string> a, std::string new_rel_name) 
 	vector<Attribute> attr;
 	Relation *r = new Relation();
 	r->set_name(new_rel_name);
+	//r->set_keys(a);
 	//r->set_atts(a);
-
+	
 	vector<int> indices;
 	for(int i=0; i< (int)a.size(); i++)
 	{
@@ -180,6 +196,11 @@ Relation& Relation::projection(std::vector<string> a, std::string new_rel_name) 
 		}
 	}
 	r->set_atts(attr);
+	r->set_keys(a);
+	vector<int> index;
+	for(int i=0; i< attr.size(); i++)
+		index.push_back(i);
+	r->set_indices(index);
 	vector<Entity> entities;
 	for(int i=0; i<(int)relations_ents.size(); i++)
 	{
@@ -188,9 +209,9 @@ Relation& Relation::projection(std::vector<string> a, std::string new_rel_name) 
 		for(int j=0; j<(int)indices.size(); j++)
 			new_data.push_back(data[indices[j]]);
 		Entity e = Entity(new_data);
-		entities.push_back(e);
+		r->insert_entity(e);
 	}
-	r->relations_ents=entities;
+	//r->relations_ents=entities;
 	/*	
 	//create number of blank entities
 	for (int m = 0; m < (int)relations_ents.size(); ++m) {
@@ -212,6 +233,44 @@ Relation& Relation::projection(std::vector<string> a, std::string new_rel_name) 
 
 
 }
+
+void Relation::update( vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck)
+{
+	vector<int> indicesOfNewValues;
+	vector<int> indicesOfOldValues;
+	cout<<attriToCheck[0]<<endl<<valuesToCheck[0]<<endl;
+	cout<<attriToChange[0]<<endl<<newValue[0]<<endl;
+	for(int i=0; i<relations_atts.size(); i++)
+	{
+		for(int j=0; j<attriToChange.size(); j++)
+			if(relations_atts[i].get_name().compare(attriToChange[j]) == 0)
+				indicesOfNewValues.push_back(i);
+		for(int j=0; j<attriToCheck.size(); j++)
+			if(relations_atts[i].get_name().compare(attriToCheck[j]) == 0)
+				indicesOfOldValues.push_back(i);
+	}
+	///cout<<"!\n";
+	vector<int> sameEntitiesIndices;
+	for(int i=0; i<relations_ents.size(); i++)
+	{
+		vector<string> data = relations_ents[i].getData(); 
+		bool same = true;
+		for(int j=0; j<indicesOfOldValues.size(); j++)
+			if(valuesToCheck[j].compare(data[indicesOfOldValues[j]]) != 0)
+				same = false;
+		//cout<<"!\n";
+		if(same)
+		{
+			cout<<"!\n";
+			for(int k=0; k<indicesOfNewValues.size(); k++) 
+			{
+				data[indicesOfNewValues[k]] = newValue[k];
+			}
+			relations_ents[i].set_data(data);
+		}
+	}
+}
+
 
 void Relation::display() {
 	cout<<"Relation: "<<name<<"\n";
