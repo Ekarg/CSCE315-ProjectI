@@ -155,26 +155,31 @@ void Relation::sort_by(std::string primary_key) {
 	}
 }
 
-Relation& Relation::projection(std::vector<Attribute> a, std::string new_rel_name) {
+Relation& Relation::projection(std::vector<string> a, std::string new_rel_name) {
+	/*
 	if (new_rel_name == this->get_name()) {
 		printf("ERROR: Projection Table Name Conflict; \n");
 	}
+	*/
+	vector<Attribute> attr;
 	Relation *r = new Relation();
 	r->set_name(new_rel_name);
-	r->set_atts(a);
+	//r->set_atts(a);
 
 	vector<int> indices;
 	for(int i=0; i< (int)a.size(); i++)
 	{
 		for(int j=0; j<(int)relations_atts.size(); j++)
 		{
-			if(a[i].get_name().compare(relations_atts[j].get_name())==0)
+			if(a[i].compare(relations_atts[j].get_name())==0)
 			{
+				attr.push_back(relations_atts[j]);
 				indices.push_back(j);
 				break;
 			}
 		}
 	}
+	r->set_atts(attr);
 	vector<Entity> entities;
 	for(int i=0; i<(int)relations_ents.size(); i++)
 	{
@@ -232,4 +237,8 @@ void Relation::rename(string old, string new_name) {
 			relations_atts[i].set_name(new_name);
 }
 
+void Relation::rename(int old, string new_name) {
+	if(old<relations_atts.size())
+		relations_atts[old].set_name(new_name);
+}
 

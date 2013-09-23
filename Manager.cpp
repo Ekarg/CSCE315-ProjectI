@@ -20,6 +20,12 @@ Manager::Manager() {
 
 }
 
+void Manager::insertNewRelation (string name) 
+{
+	database.insertNewRelation(name);
+}
+
+
 void Manager::setUpDatabase(vector<string> fileNames) {
 	for(int i=0; i<(int)fileNames.size(); i++)
 	{
@@ -48,12 +54,18 @@ void Manager::insertOne(string rel_name, vector<string> data) //Command : INSERT
 
 }
 
-void Manager::insertFrom(string rel_name, std::string expr)
+void Manager::insertFrom(string rel_name)
 {
-	//NOT FINISHED :------------------------------------------:
-	//parse expr into a relation
-	//take union of two relations. 
-	//all elements in A and all elements in B
+	//I won't lie, this function is not very robust. 
+	//temp is created from handleQuery() called in the parser where this is called
+	//This design feels poor and this function shouldn't be called anywhere without
+	//first being prefaced with handleQuery();
+	vector<Entity> temp = database.find_rel("temp").get_rel_ents();
+	for (int i = 0; i < temp.size(); ++i) {
+		Entity e = temp[i];
+		database.insert_into(rel_name, e);
+	}
+	return;
 }
 
 void Manager::exit() //Command : EXIT;
@@ -63,15 +75,15 @@ void Manager::exit() //Command : EXIT;
 	//database that isn't temp
 }
 
-bool Manager::remove_things(string rel_name, std::string expr) //Command : DELETE FROM XXX WHERE XXX;
+bool Manager::remove_things(string rel_name) //Command : DELETE FROM XXX WHERE XXX;
 {
-	//NOT FINISHED :------------------------------------------:
-	//parse expr into a relation
-	//take difference of two relations. 
-	// all elements in A that aren't also in B
-	Entity e;
-	database.remove_entity(rel_name, e);
-	return false;
+	//READ COMMENTS IN insertFrom();
+	vector<Entity> temp = database.find_rel("temp").get_rel_ents();
+	for (int i = 0; i < temp.size(); ++i) {
+		Entity e = temp[i];
+		database.remove_entity(rel_name, e);
+	}
+	return true;
 }
 
 void Manager::update(string rel_name, Entity old, Entity new_e)
@@ -119,13 +131,12 @@ void Manager::select(string rel_name, string new_rel, Attribute attributes, std:
 
 }
 
-void Manager::projection(vector<Attribute> attr,string rel_nam, string new_name)
+bool Manager::projection(vector<string> attr,string rel_name, string new_name)
 {
-
-
+	return database.projection(attr, rel_name, new_name);
 }
 
-void Manager::rename(string rel_name, string old_att_name, string new_att_name)
+void Manager::rename(string rel_name, int old_att_name, string new_att_name)
 {
 
 

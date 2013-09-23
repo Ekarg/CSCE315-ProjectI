@@ -13,6 +13,7 @@
 #include <vector> 
 #include <string>
 #include <iostream>
+#include <stack>
 #include "parser.h"
 using namespace std;
 
@@ -58,13 +59,41 @@ vector<string> Parser::tokenizer(string line) {
 	return tokens;
 
 }
-
 //WE NEED A RECURSIVE DESCENT PARSER FOR PARSING AND HANDLING EXPRESSIONS 
+
+vector<string> Parser::queryTokenizer(string line) {
+	char* str = new char[line.length()+1];
+	char* next = NULL;
+	vector<string> tokens;
+	for(int i=0; i<(int)line.length(); i++)
+		str[i]=line.at(i);
+	str[line.length()]=NULL;
+	char * start = NULL;
+	start = strtok_s(str, " ,", &next);
+	while(start!=NULL)
+	{
+		string s(start);
+		tokens.push_back(s);
+		start = strtok_s(NULL, " ", &next);
+	}
+	//START TROUBLESHOOTING ITERATOR	
+	/*
+	for (int i = 0; i < tokens.size(); ++i) {
+			cout << tokens[i];
+	}
+	*/
+	//END TROUBLESHOOTING ITERATOR		
+
+	return tokens;
+
+}
 
 bool Parser::validate(string input) {
 	
 	vector<string> tokens = tokenizer(input);
 	if(!tokens.size()>0)
+		return false;
+	if(!matchingParenthesis(tokens))
 		return false;
 	string first = tokens[0];
 	string s = ";";
@@ -141,9 +170,8 @@ bool Parser::validate(string input) {
 					expr += tokens[i];
 				}
 				cout << "expr == " << expr << endl;
-				manager.insertFrom(rel_name, expr);
-				//parse_expr(expr);
-				//union(table1, table2);
+				handleQuery(expr);
+				manager.insertFrom(rel_name);
 			}
 			// Case for "INSERT INTO dots VALUES FROM (0, 0, 0);"
 			else {
@@ -199,12 +227,15 @@ bool Parser::validate(string input) {
 		// TO BE PARSED RECURSIVELY INTO A TABLE AND THEN SUBTRACTED FROM
 		// THE THE TABLE rel_name. ASSUMED ERROR CATCHING FOR EXPRESSION PASRING
 		// TO BE HANDLED IN parse_expr. ??????????????????????????????
-		// parse_expr(expr);
-		// difference(table1, table2);
+		if (!handleQuery(expr)) {
+			printf("Invalid Expression in delete command;\n");
+			return false;
+		}
+		//difference(table1, table2);
 		printf("Delete command parsed.\n\n");
 
 		//Call manager function
-		manager.remove_things(rel_name, expr);
+		manager.remove_things(rel_name);
 
 		return true; 
 	}
@@ -410,52 +441,49 @@ bool Parser::validate(string input) {
 		printf("Create command parsed.\n\n");
 		return true; 
 	}
-	else if(uni.compare(first) == 0)
-	{
-		return true;
-
-	}
-	else if(difference.compare(first) == 0)
-	{
-		return true;
-	}
-
-	else if(select.compare(first) == 0)
-	{
-		return true;
-	}
-	else if(projection.compare(first) == 0)
-	{
-		return true;
-	}
-	else if(rename.compare(first) == 0)
-	{
-		return true;
-	}
 	else // Query 
 	{
-		string keys[] = {"union", "rename","cross", "project","select","rename"};
-		int numKeys = 5;
 		//Grace Coffman	
-		if(tokens.size()<3)
+		if(tokens.size()<4)
 			return false;
-		if(tokens.size() == 3)
-			return true;
+	//	if(tokens.size() == 4)
+	//		return true;
 		string arrow = "<-";
 		string start = "(";
 		string end = ")";
 		string semi = ";";
 		if(arrow.compare(tokens[1])!=0)
 			return false;
-		int j=2;
-		while(j<tokens.size()) 
+		tokens.erase(tokens.begin());
+		tokens.erase(tokens.begin());
+		evaluate(tokens);
+
+		manager.insertNewRelation(first);
+	}
+
+		//tokens.erase(tokens.end());
+		return false;
+}
+
+
+bool Parser::evaluate(vector<string> tokens) 
+{
+	string start = "(";
+	string end = ")";
+	int j=0;
+	string keys[] = {"union", "rename","cross", "project","select","rename"};
+	int numKeys = 5;
+	stack<string> commands;
+		while(j<(tokens.size()-1)) 
 		{
 			string send = " ";
 			int numStart=0;
+			bool match = false;
 		for(int i=0; i<numKeys; i++)
 		{
 			if(keys[i].compare(tokens[j]) == 0)
 			{
+				match = true;
 				send = " " + tokens[j];
 				//we have found a keyword, now need to find the expression to evaluate
 				int x=j+1;
@@ -465,7 +493,7 @@ bool Parser::validate(string input) {
 					return false;
 				numStart++;
 				x++;
-				while(x<tokens.size())
+				while(x<(tokens.size()-1))
 				{
 					if(start.compare(tokens[x]) == 0)
 					{
@@ -476,6 +504,7 @@ bool Parser::validate(string input) {
 						numStart--;
 						if(numStart == 0)
 						{
+							/*
 							bool check = validate(send+" ;");		
 							if(!check)
 								return false;
@@ -484,23 +513,150 @@ bool Parser::validate(string input) {
 								j = x+1;
 								break;
 							}
+							*/
+							commands.push(send);
+							j=x+1;
+							break;
 						}
 					}
 						send=send+" " + tokens[x];	
 						x++;
 				}
-				j=x+1;
-				if(semi.compare(tokens[j])==0)
-				{
-					printf("Query command parsed.\n\n");
-					return true;
-				}
-				break;
 			}
+			if(match)
+				break;
 		}
-
+		if(!match)
+		{
+			commands.push(tokens[j]); 
+			j++;
 		}
 
 	}
+	//	string end = ")";
+	//	string start = "(";
+		while(commands.size() > 0) 
+		{
+			string s = commands.top();
+			commands.pop();
+			cout<<s<<endl;
+			handleQuery(s);
+		}
+}
+
+
+
+bool Parser::matchingParenthesis(vector<string> tokens) 
+{
+	int start = 0;
+	int end =0; 
+	string open = "(";
+	string close = ")";
+	for(int i=0; i<tokens.size(); i++)
+	{
+		if(open.compare(tokens[i]) == 0)
+			start ++;
+		else if(close.compare(tokens[i]) == 0)
+			end ++;
+	}
+	if(start != end) 
+		return false;
+	return true;
+}
+
+bool Parser::handleQuery(string input) {
+	string open = "(";
+	string close = ")";
+	if(close.compare(input)==0)
+		//igonore
+			return true;
+	else if(open.compare(input)==0) 
+		//ignore
+		return true;
+	else if(input == "+")
+	{
+		add=true;
+		return true;
+	}
+	else if(input == "-")
+	{
+		diff=true;
+		return true;
+	}
+	else if(input == "*")
+	{
+		product=true;
+		return true;
+	}
+	//not a parenthesis
+	//If it is only one token, treat it like a relation name and set it as the relation the query will exectute on
+	//     after the query is compeleted, be sure to reset the name back to null
+	//If it MORE than one token, do the cases for the possible keywords
+	vector<string> tokens = queryTokenizer(input);
+	string first = tokens[0];
+	if(tokens.size() == 1)
+	{
+		if(product || diff || add)
+		{
+			rel_name2 = first;
+			arithmetic();
+		}
+		else
+			rel_name=first; //found a relation name
+		rel_name="\0";
+		return true;
+	}
+	else if(projection.compare(first) == 0)
+	{
+		tokens.erase(tokens.begin());
+		string s = " "; //this function needs to be changed so that it doesn't accept a second string -> do this later
+		bool valid = false;
+		if(product || diff || add)
+		{
+			valid = manager.projection(tokens, rel_name2, s);
+			arithmetic();
+		}
+		else
+			valid = manager.projection(tokens, rel_name, s);
+		rel_name="\0";
+		return valid;
+	}
+	else if(rename.compare(first) == 0)
+	{
+		for(int i=1; i<tokens.size(); i++)
+			manager.rename(rel_name, i-1, tokens[i]);
+		rel_name="\0"; 
+		return true;
+	}
+	else if(select.compare(first) == 0) 
+	{
+		//Need to do select
+		rel_name="\0";
+	}
 	return false;
 }
+
+
+bool Parser::arithmetic() 
+{
+	if(add) //union
+	{
+		manager.uni(rel_name, rel_name2, " ");
+		add = false;
+	}
+	else if(diff) //difference 
+	{
+		manager.difference(rel_name, rel_name2, " ");
+		diff=false;
+	}
+	else //product
+	{
+		manager.cross(rel_name, rel_name2, " ");
+		product = false;
+	}
+
+	return true;
+
+}
+
+

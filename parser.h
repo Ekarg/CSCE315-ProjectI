@@ -58,7 +58,12 @@ public:
 	string select;
 	string into;
 	Manager manager;
-
+	Relation temp;
+	bool product;
+	bool diff;
+	bool add;
+	string rel_name;
+	string rel_name2;
 	Parser() { 
 		open = "OPEN"; 
 		close = "CLOSE"; 
@@ -76,11 +81,20 @@ public:
 		show = "SHOW"; 
 		select="select"; 
 		manager = Manager();
+		temp = Relation();
+		rel_name="\0";
+		rel_name2="\0";
+		diff=false;
+		add=false;
+		product=false;
 	}
 	vector<string> tokenizer(string input);
+	vector<string> queryTokenizer(string input);
 	bool validate(string input);
-
-
+	bool matchingParenthesis(vector<string> tokens);
+	bool handleQuery(string input);
+	bool evaluate(vector<string> tokens);
+	bool arithmetic();
 };
 
 #endif

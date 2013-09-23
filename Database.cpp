@@ -20,6 +20,12 @@
 #include "time.h"
 using namespace std;
 
+void Database::insertNewRelation(string name) 
+{
+	temp.set_name(name);
+	vec_relations.push_back(temp);
+}
+
 bool Database::create_table(string name_init, vector<Attribute> table_attributes, 
 							vector<string> primary_key)
 {		
@@ -190,7 +196,6 @@ void Database::rename_table(std::string rel_name, std::string new_rel_name) {
 		vec_relations[hold].set_name(new_rel_name);
 }
 
-
 void Database::exit() {
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
 		close(i);
@@ -266,7 +271,7 @@ void Database::test() {
 	string str = "lion";
 	select("animals", "lions", a, str);
 	display("lions");
-
+	/*
 	printf("***Projection test\n");
 	printf("Attributes: name, type\n");
 	vector<Attribute> att;
@@ -274,7 +279,7 @@ void Database::test() {
 	att.push_back(Attribute("type", 0));
 	projection(att, "animals", "names&types");
 	display("names&types");
-
+	*/
 	printf("***Rename attribute 'tpye' to 'species' in lions\n");
 	rename("lions","type","species");
 	display("lions");
@@ -346,19 +351,51 @@ void Database::select(std::string rel_name, std::string new_rel, Attribute attri
 
 }
 
-void Database::projection(vector<Attribute> att, string rel_name, string new_name) {
+bool Database::projection(vector<string> att, string rel_name, string new_name) {
+	if(rel_name == "\0")
+	{
+		if(att.size() > temp.get_atts().size())
+		{
+			printf("Error: More attributes listed than in relation. Please try again.\n");
+			return false;
+		}
+		temp = temp.projection(att, new_name);
+		return true;
+	}
+	else if(rel_name== "\0\0")
+	{
+		if(att.size() > temp2.get_atts().size())
+		{
+			printf("Error: More attributes listed than in relation. Please try again.\n");
+			return false;
+		}
+		temp2 = temp2.projection(att, new_name);
+		return true;
+	}
 	for(int i=0; i<(int)vec_relations.size(); i++)
 	{
 		if(vec_relations[i].get_name().compare(rel_name)==0)
 		{
-			Relation r;
-			r = vec_relations[i].projection(att, new_name);
-			vec_relations.push_back(r);
+			//Relation r;
+			temp = vec_relations[i].projection(att, new_name);
+			return true;
+			//vec_relations.push_back(r);
+		}
+	}
+	return false;
+}
+
+void Database::rename(string rel_name, string old_att_name, string new_att_name) {
+	for(int i=0; i<(int)vec_relations.size(); i++)
+	{
+		if(vec_relations[i].get_name().compare(rel_name)==0)
+		{			
+			vec_relations[i].rename(old_att_name, new_att_name);			
 		}
 	}
 }
 
-void Database::rename(string rel_name, string old_att_name, string new_att_name) {
+void Database::rename(string rel_name, int old_att_name, string new_att_name) {
 	for(int i=0; i<(int)vec_relations.size(); i++)
 	{
 		if(vec_relations[i].get_name().compare(rel_name)==0)
@@ -385,15 +422,14 @@ void Database::uni(string rel_name1, string rel_name2, string new_name) {
 			r2=vec_relations[i];			
 		}
 	}
-	Relation r3;
-	r3.create(new_name,r1.get_atts(), r1.get_keys());
-	r3.set_data(r1.get_data());
+	temp.create(new_name,r1.get_atts(), r1.get_keys());
+	temp.set_data(r1.get_data());
 	vector<Entity> data = r2.get_data();
 	for(int i=0; i<(int)data.size(); i++)
 	{
-		r3.insert_entity(data[i]);
+		temp.insert_entity(data[i]);
 	}
-	vec_relations.push_back(r3);
+	//vec_relations.push_back(temp);
 }
 
 void Database::difference(string rel_name1, string rel_name2, string new_name) {
@@ -416,16 +452,15 @@ void Database::difference(string rel_name1, string rel_name2, string new_name) {
 	Relation r3;
 	r3.create(new_name,r2.get_atts(), r2.get_keys());
 	r3.set_data(r2.get_data());
-	Relation r4;
-	r4.create(new_name,r1.get_atts(), r1.get_keys());
+	temp.create(new_name,r1.get_atts(), r1.get_keys());
 	//r4.set_data(r1.get_data());
 	vector<Entity> data = r1.get_data();
 	for(int i=0; i<(int)data.size(); i++)
 	{
 		if(r3.insert_entity(data[i]))
-			r4.insert_entity(data[i]);
+			temp.insert_entity(data[i]);
 	}
-	vec_relations.push_back(r4);
+	//vec_relations.push_back(r4);
 }
 
 void Database::cross(string rel_name1, string rel_name2, string new_name) {
@@ -446,7 +481,7 @@ void Database::cross(string rel_name1, string rel_name2, string new_name) {
 			r2=vec_relations[i];			
 		}
 	}
-	Relation r3;
+	//Relation r3;
 	vector<Attribute> att1 = r1.get_atts();
 	vector<Attribute> att2 = r2.get_atts();
 	vector<Attribute> att;
@@ -462,7 +497,7 @@ void Database::cross(string rel_name1, string rel_name2, string new_name) {
 	for(int i=0; i<(int)k2.size(); i++)
 		keys.push_back(k2[i]);
 */
-	r3.create(new_name, att, keys); 
+	temp.create(new_name, att, keys); 
 	vector<Entity> data1 = r1.get_data();
 	vector<Entity> data2 = r2.get_data();
 	for(int i=0; i<(int)data1.size(); i++)
@@ -477,10 +512,10 @@ void Database::cross(string rel_name1, string rel_name2, string new_name) {
 			for(int k=0; k<s2data.size(); k++)
 				newData.push_back(s2data[k]);
 			Entity e = Entity(newData);
-			r3.insert_entity(e);
+			temp.insert_entity(e);
 		}
 	}
-	vec_relations.push_back(r3);
+	//vec_relations.push_back(r3);
 }
 
 void Database::update(string rel_name, Entity old, Entity new_e){
@@ -495,4 +530,16 @@ void Database::update(string rel_name, Entity old, Entity new_e){
 	}
 
 
+}
+
+
+Relation Database::find_rel(std::string s) {
+	for (int i = 0; i < vec_relations.size(); ++i) {
+		if (vec_relations[i].get_name() == s) {
+			return vec_relations[i];
+		}
+	}
+	//THIS CASE SHOULD NEVER HAPPEN
+	Relation r;
+	return r;
 }

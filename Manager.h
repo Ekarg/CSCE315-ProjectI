@@ -24,13 +24,13 @@ public:
 	void setUpDatabase(std::vector<std::string> fileNames);
 	void print();
 	void test();
-
+	void insertNewRelation (string name);
 	//Functions to be called from parser if commands inputed by the user is valid
 	//Wes
 	void insertOne(string rel_name, vector<string> data);
-	void insertFrom(string target, string source);
+	void insertFrom(string rel_name);
 	void exit();
-	bool remove_things(string rel_name, std::string s); 		//remove entities from database
+	bool remove_things(string rel_name); 		//remove entities from database
 	void update(string rel_name, Entity old, Entity new_e);
 	void write(string rel_name);
 
@@ -42,8 +42,8 @@ public:
 
 	//Grace
 	void select(string rel_name, string new_rel, Attribute attributes, std::string values);
-	void projection(vector<Attribute> attr,string rel_nam, string new_name);
-	void rename(string rel_name, string old_att_name, string new_att_name);
+	bool projection(vector<string> attr,string rel_nam, string new_name);
+	void rename(string rel_name, int old_att_name, string new_att_name);
 	void uni(string rel_name1, string rel_name2, string new_name);
 	void difference(string rel_name1, string rel_name2, string new_name);
 	void cross(string rel_name1, string rel_name2, string new_name);
