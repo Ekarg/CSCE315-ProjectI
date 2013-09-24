@@ -60,11 +60,9 @@ void Manager::insertFrom(string rel_name)
 	//temp is created from handleQuery() called in the parser where this is called
 	//This design feels poor and this function shouldn't be called anywhere without
 	//first being prefaced with handleQuery();
-	vector<Entity> temp = database.find_rel("temp").get_rel_ents();
-	for (int i = 0; i < temp.size(); ++i) {
-		Entity e = temp[i];
-		database.insert_into(rel_name, e);
-	}
+	insertNewRelation(rel_name);
+	
+
 	return;
 }
 
@@ -86,7 +84,7 @@ bool Manager::remove_things(string rel_name) //Command : DELETE FROM XXX WHERE X
 	return true;
 }
 
-void Manager::update(string rel_name, Entity old, Entity new_e)
+void Manager::update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck)
 {   
 	//NOT FINISHED :------------------------------------------:
 	//THERE'S LIKE ONLY ONE EXAMPLE OF THIS COMMAND
@@ -94,6 +92,7 @@ void Manager::update(string rel_name, Entity old, Entity new_e)
 	//NOT SURE IF UPDATING A SINGLE ENTITY OR
 	//UPDATING A SINGLE ATTRIBUTE IN EACH ENTITY IN
 	//A RELATION WHERE A SPECIFIC CONDITION IS MET
+	database.update(rel_name, attriToChange, newValue,  attriToCheck, valuesToCheck);
 }
 
 void Manager::write(string rel_name) //Command : WRITE XXX;
@@ -127,8 +126,7 @@ void Manager::show(string rel_name)
 //Grace 
 void Manager::select(string rel_name, string new_rel, Attribute attributes, std::string values)
 {
-
-
+	database.select(rel_name, new_rel, attributes, values);
 }
 
 bool Manager::projection(vector<string> attr,string rel_name, string new_name)

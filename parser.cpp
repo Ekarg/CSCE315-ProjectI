@@ -57,7 +57,6 @@ vector<string> Parser::tokenizer(string line) {
 	//END TROUBLESHOOTING ITERATOR		
 
 	return tokens;
-
 }
 //WE NEED A RECURSIVE DESCENT PARSER FOR PARSING AND HANDLING EXPRESSIONS 
 
@@ -110,7 +109,7 @@ bool Parser::validate(string input) {
 		if(tokens[2].back()!=';')
 			return false;
 		string rel_name = tokens.at(1);
-		printf("Open command parsed.\n\n");
+		//printf("Open command parsed.\n\n");
 
 		//Call manager function
 		manager.open(rel_name);
@@ -125,7 +124,7 @@ bool Parser::validate(string input) {
 		if(tokens[2].back()!=';')
 			return false;
 		string rel_name = tokens.at(1);
-		printf("Close command parsed.\n\n");
+		//printf("Close command parsed.\n\n");
 
 		//Call manager function
 		manager.close(rel_name);
@@ -140,7 +139,7 @@ bool Parser::validate(string input) {
 		if(tokens[2].back()!=';')
 			return false;
 		string rel_name = tokens.at(1);
-		printf("Write command parsed.\n\n");
+		//printf("Write command parsed.\n\n");
 
 		//Call manager function
 		manager.write(rel_name);
@@ -149,7 +148,7 @@ bool Parser::validate(string input) {
 	}
 	else if(exit.compare(first) == 0)
 	{
-		printf("Exit command parsed.\n\n");
+		//printf("Exit command parsed.\n\n");
 
 		//Call manager function
 		manager.exit();
@@ -165,12 +164,12 @@ bool Parser::validate(string input) {
 			// Case for "INSERT INTO points VALUES FROM RELATION (select (z2 > 0) dots_to_points);"
 			if (tokens[0] == "RELATION") {
 				tokens.erase(tokens.begin());
-				string expr;
+				vector<string> expr;
 				for (int i = 0; i < tokens.size(); ++i) {
-					expr += tokens[i];
+					expr.push_back(tokens[i]);
 				}
-				cout << "expr == " << expr << endl;
-				handleQuery(expr);
+				//cout << "expr == " << expr << endl;
+				evaluate(expr);
 				manager.insertFrom(rel_name);
 			}
 			// Case for "INSERT INTO dots VALUES FROM (0, 0, 0);"
@@ -201,11 +200,11 @@ bool Parser::validate(string input) {
 					if (args[k][args[k].size()-1] == ';') {
 						args[k].erase(args[k].end()-1);
 					}
-					cout << args[k] << endl;
+					//cout << args[k] << endl;
 				}
 				manager.insertOne(rel_name, args);
 			}
-			printf("Insert command parsed.\n\n");
+			//printf("Insert command parsed.\n\n");
 
 			//Call manager function
 		
@@ -215,7 +214,7 @@ bool Parser::validate(string input) {
 	}
 	else if( (del.compare(first) == 0) && (tokens[1] == "FROM") && (tokens[3] == "WHERE") && (tokens.size() > 4) )
 	{
-		printf("Delete command parsed.\n\n");
+		//printf("Delete command parsed.\n\n");
 		string rel_name = tokens[2];
 		tokens.erase(tokens.begin(), tokens.begin()+4);
 		string expr;
@@ -232,7 +231,7 @@ bool Parser::validate(string input) {
 			return false;
 		}
 		//difference(table1, table2);
-		printf("Delete command parsed.\n\n");
+		//printf("Delete command parsed.\n\n");
 
 		//Call manager function
 		manager.remove_things(rel_name);
@@ -255,15 +254,22 @@ bool Parser::validate(string input) {
 			return false;
 		int i=3;
 		string equal = "=";
+		string rel_name = tokens[1];
+		vector<string> attriToChange;
+		vector<string> newValues;
+		
 		while(wher.compare(tokens[i]) != 0 && (i+3)<tokens.size())
 		{
 			if(equal.compare(tokens[i+1]) != 0)
 			{
-				printf("1\n");
+				//printf("1\n");
 				return false;
 			}
+			attriToChange.push_back(tokens[i]);
+			newValues.push_back(tokens[i+2]);
 			i+=3;
 		}
+	
 		string semi = ";";
 		i++;
 		if(i>=tokens.size() )
@@ -271,16 +277,21 @@ bool Parser::validate(string input) {
 			cout<<"Error: conditions expected after WHERE\n";
 			return false;
 		}
+		vector<string> attriToCheck;
+		vector<string> valuesToCheck;
 		while((i+2)<tokens.size())
 		{
 			if(equal.compare(tokens[i+1]) != 0)
 			{
 				return false;
 			}
+			attriToCheck.push_back(tokens[i]);
+			valuesToCheck.push_back(tokens[i+2]);
 			i+=2;
 		}
-		printf("Update command parsed.\n\n");
-
+		
+	//	printf("Update command parsed.\n\n");
+		manager.update(rel_name, attriToChange,newValues,attriToCheck,valuesToCheck);
 		//Call manager function
 		//manager.update(tokens[1], ); 
 		//THERE'S LIKE ONLY ONE EXAMPLE OF THIS COMMAND
@@ -298,7 +309,7 @@ bool Parser::validate(string input) {
 		if(tokens[2].back() != ';')
 			return false;
 		string rel_name = tokens.at(1);
-		printf("Show command parsed.\n\n");
+		//printf("Show command parsed.\n\n");
 
 		//Call manager function
 		manager.show(rel_name);
@@ -379,16 +390,30 @@ bool Parser::validate(string input) {
 		}
 		int numStart = 1;
 		x++;
-		while(x<tokens.size() && numStart != 0)
+		vector<Attribute> attr;
+		while(x<tokens.size()-1 && numStart != 0)
 		{
 			//Get attributes here
 			if(end.compare(tokens[x]) == 0)
 				numStart--;
-			if(start.compare(tokens[x]) == 0)
+			else if(start.compare(tokens[x]) == 0)
 				numStart++;
+			else {
+				string name = tokens [x];
+				string type = tokens [x++];
+				int num = 0;
+				if(type == "VARCHAR")
+					num = 3;
+				else if(type == "INTEGER")
+					num = 1;
+				else if(type == "BOOL")
+					num=2;
+				attr.push_back(Attribute(name, num));
+			}
 			x++;
 		
-		}if( x>=tokens.size())
+		}
+		if( x>=tokens.size())
 		{
 			printf("Missing )\n");			
 			return false;
@@ -418,15 +443,22 @@ bool Parser::validate(string input) {
 		}
 		numStart = 1;
 		x++;
+		string keyString ="";
 		while(x<tokens.size() && numStart != 0)
 		{
 			//Get attributes here
-			if(end.compare(tokens[x]) == 0)
+				if(end.compare(tokens[x]) == 0)
 				numStart--;
-			if(start.compare(tokens[x]) == 0)
+			else if(start.compare(tokens[x]) == 0)
 				numStart++;
+			else {
+				keyString+=tokens[x];
+
+			}
 			x++;
 		}
+		vector<string> keys = queryTokenizer(keyString);
+		manager.createTable(rel_name, attr, keys);
 		if( x>=tokens.size())
 			return false;
 		string semi = ";";
@@ -438,7 +470,7 @@ bool Parser::validate(string input) {
 		x++;
 		if( x<tokens.size())
 			return false;
-		printf("Create command parsed.\n\n");
+	//	printf("Create command parsed.\n\n");
 		return true; 
 	}
 	else // Query 
@@ -539,7 +571,7 @@ bool Parser::evaluate(vector<string> tokens)
 		{
 			string s = commands.top();
 			commands.pop();
-			cout<<s<<endl;
+			//cout<<s<<endl;
 			handleQuery(s);
 		}
 }
@@ -603,7 +635,7 @@ bool Parser::handleQuery(string input) {
 		}
 		else
 			rel_name=first; //found a relation name
-		rel_name="\0";
+		//rel_name="\0";
 		return true;
 	}
 	else if(projection.compare(first) == 0)
@@ -631,6 +663,13 @@ bool Parser::handleQuery(string input) {
 	else if(select.compare(first) == 0) 
 	{
 		//Need to do select
+		if(tokens.size() < 5)
+			return false;
+		string attribute = tokens[1];
+		string value = tokens[4];
+		Attribute a = Attribute(attribute, 0);
+		cout<<rel_name;
+		manager.select(rel_name, "\0" , a, value);
 		rel_name="\0";
 	}
 	return false;

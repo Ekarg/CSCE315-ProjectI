@@ -38,19 +38,20 @@ bool Database::create_table(string name_init, vector<Attribute> table_attributes
 			return 1;
 		}
 	}
-	if (r.create(name_init, table_attributes, primary_key)) {
+	if (! r.create(name_init, table_attributes, primary_key)) {
 		printf("ERROR: Failed to create table; \n");
-		return 1;
+		return false;
 	}
 	
 	vec_relations.push_back(r);
-	return 0;
+	return true;
 }	
 
 void Database::show(string rel_name) {
+	//printf("size: %d\n", vec_relations.size());
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
 		if (vec_relations[i].get_name() == rel_name) {
-			vec_relations[i].show();
+			vec_relations[i].display();
 			return;
 		}
 	}
@@ -307,7 +308,7 @@ void Database::test() {
 	en2.push_back("4");
 	en2.push_back("tiger");
 	Entity e13=Entity(en2);
-	update("animals",e12, e13);
+	//update("animals",e12, e13);
 	display("animals");
 
 }
@@ -335,16 +336,17 @@ bool Database::remove_entity(string rel_name, Entity e) {
 }
 
 void Database::select(std::string rel_name, std::string new_rel, Attribute attributes, std::string values){
+	cout<<rel_name<<endl<<new_rel;
 	for(int i=0; i<(int)vec_relations.size(); i++)
 	{
 		if(vec_relations[i].get_name().compare(rel_name)==0)
 		{
 			vector<Entity> data =vec_relations[i].select(attributes, values);
-			Relation r;
-			r.create(new_rel, vec_relations[i].get_atts(), vec_relations[i].get_keys());
+			//printf("size: \n", data.size());
+			temp.create(new_rel, vec_relations[i].get_atts(), vec_relations[i].get_keys());
 			for(int j=0; j<(int)data.size(); j++)
-				r.insert_entity(data[j]);
-			vec_relations.push_back(r);
+				temp.insert_entity(data[j]);
+			//vec_relations.push_back(r);
 		}
 
 	}
@@ -518,14 +520,12 @@ void Database::cross(string rel_name1, string rel_name2, string new_name) {
 	//vec_relations.push_back(r3);
 }
 
-void Database::update(string rel_name, Entity old, Entity new_e){
+void Database::update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck){
 	for(int i=0; i<(int)vec_relations.size(); i++)
 	{
 		if(vec_relations[i].get_name().compare(rel_name)==0)
 		{	
-			int index = vec_relations[i].find(old);
-			vec_relations[i].remove(index);		
-			vec_relations[i].insert_entity(new_e);
+			vec_relations[i].update(attriToChange,  newValue,  attriToCheck,  valuesToCheck);
 		}
 	}
 

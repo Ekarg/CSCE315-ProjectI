@@ -37,6 +37,7 @@ public:
 	//{ return s[index]; }
 	std::vector<std::string> getData();
 	//** Basic Set Functions **//
+	void set_data(std::vector<std::string> data) { s=data; }
 	void insert_elem(std::string value, int index) { s[index] = value; }
 	
 };

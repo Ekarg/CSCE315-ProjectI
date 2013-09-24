@@ -49,7 +49,7 @@ public:
 	Relation& difference(const Relation& other, std::string new_rel_name);
 	Relation& cross(const Relation& other, std::string new_rel_name);
 	std::vector<Entity> select(Attribute a, std::string value);
-
+	void update( vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck);
 	//** Sort Utility Functions **//
 	void sort_by(std::string primary_key);  // primary_key = name of attribute
 	bool compare_entity(Entity a, Entity b);
@@ -64,6 +64,8 @@ public:
 	void set_name(std::string s) { name = s; } 
 	void set_temp(bool b) { temp = b; } 
 	void set_atts(std::vector<Attribute> a) { relations_atts = a; }
+	void set_keys(std::vector<string> a) { keys= a; }
+	void set_indices(std::vector<int> a) { key_indices = a; }
 	void set_data(std::vector<Entity> e) { relations_ents = e; }
 };
 

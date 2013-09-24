@@ -31,7 +31,7 @@ public:
 	void insertFrom(string rel_name);
 	void exit();
 	bool remove_things(string rel_name); 		//remove entities from database
-	void update(string rel_name, Entity old, Entity new_e);
+	void update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck);
 	void write(string rel_name);
 
 	//Sid

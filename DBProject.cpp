@@ -34,9 +34,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	// Accepts input from a text file and tests the commands 
 	string line;
-	ifstream input("testInput.txt"); //input -- Make sure this is in the current folder
+	ifstream input("test.txt"); //input -- Make sure this is in the current folder
 	ofstream output ("output.txt"); //output
-
+	Parser p = Parser();
 	if(input.is_open() && output.is_open()) 
 	{
 		cout<<"******Writing output to output.txt\n";
@@ -47,44 +47,21 @@ int _tmain(int argc, _TCHAR* argv[])
 			if(input == "Hello_World") {
 				break;
 			}
-			Parser p = Parser();
+			
 			bool valid = p.validate(line);
 			if(valid)
 			{
-				cout<<"Command is valid.\n";
-				output<<"Command is valid.\n";
+				//cout<<"Command is valid.\n";
+				//output<<"Command is valid.\n";
 			}
 			else
 			{
 				cout<<"Error: Command is NOT valid\n";
-				output<<"Error: Command is NOT valid\n";
+				//output<<"Error: Command is NOT valid\n";
 			}
 		}
 		output.close();
 	}
-
-	
-	while (true) {
-		cout<<"\n\nPlease input Command\n";
-		string input;
-		//cin>>input;
-		getline(cin, input);
-		if(input == "Hello_World") {
-			break;
-		}
-		Parser p = Parser();
-		bool valid = p.validate(input);
-		if(valid)
-		{
-			cout<<"Command is valid.\n";			
-		}
-		else
-		{
-			cout<<"Error: Command is NOT valid\n";				
-		}
-	}
-
-
-	return 0;
+		return 0;
 }
 
