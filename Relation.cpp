@@ -21,6 +21,8 @@ bool Relation::create(std::string name_init, std::vector<Attribute> table_attrib
 	name = name_init;
 	relations_atts = table_attributes;
 	keys=key_list;
+
+	//figure out which attributes are assigned to be keys
 	for(int i=0; i<(int)keys.size(); i++)
 	{
 		for(int j=0; j<(int)relations_atts.size(); j++)
@@ -43,27 +45,32 @@ bool Relation::remove(int index) {
 }
 
 int Relation::find(Entity e) {
+	vector<string> elem = e.getData();
+
 	for(int i=0; i<(int)relations_ents.size(); i++)
 	{
-		bool equal = true;
-		vector<string> elem = e.getData();
-		vector<string> elem2 = relations_ents[i].getData();
-		for(int j=0; j<(int)elem.size(); j++)
-		{
-			if(elem[j].compare(elem2[j])!=0)
-			{
-				equal = false;
-			}
-		}
-		if(equal)
-		{
+		//bool equal = true;
+		//vector<string> elem = e.getData();
+		//vector<string> elem2 = relations_ents[i].getData();
+		//for(int j=0; j<(int)elem.size(); j++)
+		//{
+			//if(elem[j].compare(elem2[j])!=0)
+			//{
+				//equal = false;
+			//}
+		//}
+		//if(equal)
+		//{
+			//return i;
+		//}
+		if(elem == relations_ents.at(i).getData())
 			return i;
-		}
 	}
 	return -1;
 }
 
 bool Relation::insert_entity(Entity e) {
+	// do we need to check if the entity has the same types as database
 	//check to ensure entity should belong in table
 	vector<string> data=e.getData();
 	for(int i=0; i<(int) relations_ents.size(); i++)
@@ -72,7 +79,9 @@ bool Relation::insert_entity(Entity e) {
 		vector<string> cur_data=relations_ents[i].getData();
 		for(int j=0; j<key_indices.size(); j++){
 			if(data[key_indices[j]].compare(cur_data[key_indices[j]])==0)
-				numConflicts++;
+				numConflicts++; 
+			else 
+				break;
 		}
 		if(numConflicts == key_indices.size()) //if the number of conflicts is equal to the number of keys
 			return false;
@@ -112,12 +121,12 @@ vector<Entity> Relation::select(Attribute a, string value) {
 	return match;
 }
 
-void Relation::show() {
+void Relation::show(string& output) {
 		for (int i = 0; i < (int)relations_atts.size(); ++i) {
-			relations_atts[i].display();
+			relations_atts[i].display(output);
 		}
 		for (int j = 0; j < (int)relations_ents.size(); ++j) {
-			relations_ents[j].display();
+			relations_ents[j].display(output);
 		}
 }
 
@@ -234,12 +243,17 @@ Relation& Relation::projection(std::vector<string> a, std::string new_rel_name) 
 
 }
 
-void Relation::update( vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck)
+void Relation::update( vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck, string& output)
 {
 	vector<int> indicesOfNewValues;
 	vector<int> indicesOfOldValues;
-	cout<<attriToCheck[0]<<endl<<valuesToCheck[0]<<endl;
-	cout<<attriToChange[0]<<endl<<newValue[0]<<endl;
+	//cout<<attriToCheck[0]<<endl<<valuesToCheck[0]<<endl;
+	//cout<<attriToChange[0]<<endl<<newValue[0]<<endl;
+	output.append(attriToChange[0]); output.append("\n");
+	output.append(valuesToCheck[0]); output.append("\n");
+	output.append(attriToChange[0]); output.append("\n");
+	output.append(newValue[0]); output.append("\n");
+
 	for(int i=0; i<relations_atts.size(); i++)
 	{
 		for(int j=0; j<attriToChange.size(); j++)
@@ -261,7 +275,8 @@ void Relation::update( vector<string> attriToChange, vector<string> newValue,  v
 		//cout<<"!\n";
 		if(same)
 		{
-			cout<<"!\n";
+			//cout<<"!\n";
+			output.append("!\n");
 			for(int k=0; k<indicesOfNewValues.size(); k++) 
 			{
 				data[indicesOfNewValues[k]] = newValue[k];
@@ -272,22 +287,33 @@ void Relation::update( vector<string> attriToChange, vector<string> newValue,  v
 }
 
 
-void Relation::display() {
-	cout<<"Relation: "<<name<<"\n";
+void Relation::display(string& output) {
+	//cout<<"Relation: "<<name<<"\n";
+	output.append("Relation: "); output.append(name); output.append("\n");
 	for(int i=0; i<(int)relations_atts.size();i++)
-		cout<<relations_atts[i].get_name()<<'\t';
-	cout<<"\n";
+	{
+		//cout<<relations_atts[i].get_name()<<'\t';
+		output.append(relations_atts[i].get_name());
+		output.append("\t");
+	}
+	//cout<<"\n";
+	output.append("\n");
 	for(int i=0; i<(int)relations_atts.size(); i++)
 	{
-		for(int j=0; j<relations_atts[i].get_name().length(); j++)
-			cout<<"=";
-		cout<<"\t";
+		for(int j=0; j<relations_atts[i].get_name().length(); j++){
+			//cout<<"=";
+			output.append("=");
+		}
+		//cout<<"\t";
+		output.append("\t");
 	}
-	cout<<"\n";
+	//cout<<"\n";
+	output.append("\n");
 	for(int i=0; i<(int)relations_ents.size(); i++){
-		relations_ents[i].display();
+		relations_ents[i].display(output);
 	}
-	cout<<"\n";
+	//cout<<"\n";
+	output.append("\n");
 }
 
 void Relation::rename(string old, string new_name) {

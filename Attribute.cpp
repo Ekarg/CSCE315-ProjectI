@@ -29,7 +29,13 @@ bool operator== (Attribute &a, Attribute &b) {
 	return ( ( a.get_ident() == b.get_ident() ) && ( a.get_name() == b.get_name() ) );
 	}
 
-void Attribute::display() {
-	std::cout << get_name() << "(" << get_ident() << ")  \t";
-	 }
+void Attribute::display(string& output) 
+{
+	//std::cout << get_name() << "(" << get_ident() << ")  \t";
+	char temp[5];
+	itoa(get_ident(), temp, 10);
+
+	output.append(get_name()); output.append("(");
+	output.append(temp); output.append(")");
+ }
 	

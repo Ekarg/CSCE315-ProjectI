@@ -27,10 +27,11 @@ public:
 			InvalidIndex() : RuntimeException("No data in that row")
 			{}
 	};
+
 	Entity() {}
 	Entity(vector<string> data);
 	//** Display Function **//
-	void display();
+	void display(string& output);
 	
 	//** Basic Fetch Functions **//
 	string get_elem(int index) const throw (InvalidIndex);
@@ -40,6 +41,8 @@ public:
 	void set_data(std::vector<std::string> data) { s=data; }
 	void insert_elem(std::string value, int index) { s[index] = value; }
 	
+	//** Overloaded Operators **//
+	friend bool operator== (Entity &a, Entity &b);
 };
 
 #endif

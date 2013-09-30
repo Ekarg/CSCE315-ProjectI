@@ -38,7 +38,7 @@ public:
 	Attribute();
 	Attribute(std::string n, int in) throw (InvalidType, EmptyName);
 	//** Display Function **//
-	void display();
+	void display(string& output);
 
 	//** Basic Fetch Functions **//
 	std::string get_name() const { return name;}

@@ -37,9 +37,9 @@ public:
 	Relation& projection(std::vector<string> a, std::string new_rel_name);
 	//void select();
 	//void update(Entity old, Entity new_e); //update single entity** maybe idk
-	void show();
+	void show(string& output);
 	void open(std::string name);
-	void display();
+	void display(string& output);
 	void rename(string old, string new_name);
 	void rename(int old, string new_name);
 	std::vector<Attribute> get_atts() const { return relations_atts; }
@@ -49,7 +49,7 @@ public:
 	Relation& difference(const Relation& other, std::string new_rel_name);
 	Relation& cross(const Relation& other, std::string new_rel_name);
 	std::vector<Entity> select(Attribute a, std::string value);
-	void update( vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck);
+	void update( vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck, string& output);
 	//** Sort Utility Functions **//
 	void sort_by(std::string primary_key);  // primary_key = name of attribute
 	bool compare_entity(Entity a, Entity b);

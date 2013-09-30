@@ -15,11 +15,14 @@ Entity::Entity(std::vector<std::string> data) {
 	s=data;
 }
 
-void Entity::display() {
+void Entity::display(string& output) {
 	for(int i = 0; i < s.size(); ++i) {
-		std::cout << s[i] << '\t';
+		//std::cout << s[i] << '\t';
+		output.append(s[i]);
+		output.append("\t");
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
+	output.append("\n");
 }
 string Entity::get_elem(int index) const throw(InvalidIndex)
 {
@@ -29,6 +32,23 @@ string Entity::get_elem(int index) const throw(InvalidIndex)
 }
 std::vector<std::string> Entity::getData() {
 	return s;
+}
+
+bool operator== (Entity &a, Entity &b)
+{
+	vector<string> one = a.getData();
+	vector<string> two = b.getData();
+
+	if(one.size() != two.size())
+		return false;
+
+	for(int i = 0; i < one.size(); i ++)
+	{
+		if(one.at(i).compare(two.at(i)) == -1)
+			return false;
+	}
+
+	return true;
 }
 
 

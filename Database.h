@@ -24,14 +24,14 @@ public:
 	Relation temp; //this Relation is the Relation that stores the result of a query
 	Relation temp2; //this Relation is the Relation that stores the result of a query
 	//returns zero on success; nonzero on failure
-	bool create_table(std::string name_init, std::vector<Attribute> table_attributes, std::vector<std::string> primary_key);
+	bool create_table(std::string name_init, std::vector<Attribute> table_attributes, std::vector<std::string> primary_key, string& output);
 	//WATDO WITH PRIMARY KEY? HOW WE WANT TO IMPLEMENT?
 	//void update();          ????????????
 	void insert_into(string rel_name, Entity e);
 	void remove(std::string rel_name); 		//remove relation from database
 	bool remove_entity(std::string rel_name, Entity e); 		//remove relation from database
-	void show(std::string rel_name);	//print relation to screen
-	void rename_table(std::string rel_name, std::string new_rel_name);
+	void show(std::string rel_name, string& output);	//print a typical relation to screen
+	void rename_table(std::string rel_name, std::string new_rel_name, string &output);
 	void select(std::string rel_name, std::string new_rel, Attribute attributes, std::string values);
 	bool projection(std::vector<string> attr,std::string rel_nam, std::string new_name);
 	void rename(std::string rel_name, std::string old_att_name, std::string new_att_name);
@@ -39,17 +39,17 @@ public:
 	void uni(string rel_name1, string rel_name2, string new_name);
 	void difference(string rel_name1, string rel_name2, string new_name);
 	void cross(string rel_name1, string rel_name2, string new_name);
-	void update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck);
+	void update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck, string& output);
 	//void remove(std::string name, Expr e); 	//where Expr = parsed expression
 	//void show(std::string rel_name);			//show elements in relation that match atomic expression
-	void open(std::string rel_name); 	//opens relation
-	void write(std::string rel_name);	//writes relation to file
-	void close(std::string rel_name);	//close relation given relation name
-	void close(int i);					//close relation given index in vec_relations
+	void open(std::string rel_name, string& output); 	//opens relation
+	void write(std::string rel_name, string& output);	//writes relation to file
+	void close(std::string rel_name, string& output);	//close relation given relation name
+	void close(int i, string& output);					//close relation given index in vec_relations
 	vector<string> tokenizer(string line);
-	void exit();
-	void display();
-	void display(string rel_name);
+	void exit(string& output);
+	void display(string& output); //print all relations from database
+	void display(string rel_name, string& output); // Is it the same as show() ? --Sid
 	void insertNewRelation(string name);
 	void insertNewRelation(Relation r);
 	//** Basic Fetch Functions **//

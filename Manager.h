@@ -19,6 +19,9 @@ class Manager {		//interface or system for managing a database
 private:
 	vector<Database> d;
 	Database database;
+
+	string info;
+
 public: 
 	Manager();
 	void setUpDatabase(std::vector<std::string> fileNames);
@@ -47,6 +50,10 @@ public:
 	void uni(string rel_name1, string rel_name2, string new_name);
 	void difference(string rel_name1, string rel_name2, string new_name);
 	void cross(string rel_name1, string rel_name2, string new_name);
+
+	//for write to the file
+	string get_info() {return info;}
+	void writeToFile(string filename);
 
 };
 

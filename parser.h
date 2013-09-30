@@ -95,6 +95,7 @@ public:
 	bool handleQuery(string input);
 	bool evaluate(vector<string> tokens);
 	bool arithmetic();
+	void writeTofile(string filename) {manager.writeToFile(filename);}
 };
 
 #endif

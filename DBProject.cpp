@@ -1,6 +1,3 @@
-// DBProject.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <iostream>
 #include <fstream>
@@ -16,52 +13,91 @@
 #include "Relation.h"
 #include "parser.h"
 
-int _tmain(int argc, _TCHAR* argv[])
+void introduction()
 {
-	/* Loads the database file which contains the file names that store the relations
-	std::ifstream databaseFile;
-	databaseFile.open("databaseFile.txt");
-	std::vector<std::string> fileNames;
-	while(databaseFile.good())
+	cout << "***************************************************************"<<endl;
+	cout << "*                                                             *"<<endl;
+	cout << "*            Welcome to our world-class mini database         *"<<endl;                                            
+	cout << "*                                                             *"<<endl;
+	cout << "***************************************************************"<<endl;
+
+	cout<< "1 -- commands from text"<<endl;
+	cout<< "2 -- commands from keyboard"<<endl;
+
+	string choice;
+	cin >> choice;
+
+	while(choice != "1" && choice != "2")
 	{
-		std::string str;
-		std::getline(databaseFile, str);
-		fileNames.push_back(str);
+		cout << "Input error, try again"<<endl;
+		cin >> choice;
 	}
-	Manager m= Manager();
-	m.test();
-	*/
-	
-	// Accepts input from a text file and tests the commands 
+
 	string line;
-	ifstream input("test.txt"); //input -- Make sure this is in the current folder
-	ofstream output ("output.txt"); //output
 	Parser p = Parser();
-	if(input.is_open() && output.is_open()) 
+
+	if(choice == "1")
 	{
-		cout<<"******Writing output to output.txt\n";
-		while (getline(input, line)) {
-			cout<<"\n\nCommand: "<<line<<"\n";
-			output<<"\n\nCommand: "<<line<<"\n";
-			//cin>>input;			
-			if(input == "Hello_World") {
-				break;
-			}
+		string filename;
+		ifstream input;
+
+		cout << "Input file name: ";
+		cin >> filename;
+		input.open(filename, std::ifstream::in);
+
+		if(input.is_open())
+		{
+			while (getline(input, line)) 
+			{
+				cout<<"\n\nCommand: "<<line<<"\n";
+				//cin>>input;			
+				if(input == "Hello_World")	
+				{
+					break;
+				}
 			
+				bool valid = p.validate(line);
+				if(valid)
+				{
+					//may need some change on output.
+				}
+				else
+				{
+				cout<<"Error: Command is NOT valid\n";
+				}
+			}
+		}
+		else
+		{
+			cout<< "Invalid file"<<endl;
+		}
+	}
+	else
+	{
+		cin >> line;
+
+		while(line != "Exit")
+		{
 			bool valid = p.validate(line);
 			if(valid)
 			{
-				//cout<<"Command is valid.\n";
-				//output<<"Command is valid.\n";
+					//may need some change on output.
 			}
 			else
 			{
 				cout<<"Error: Command is NOT valid\n";
-				//output<<"Error: Command is NOT valid\n";
 			}
+			cin >> line;
 		}
-		output.close();
+		p.validate("Exit");
 	}
-		return 0;
+
+	p.writeTofile("output.txt");
 }
 
+int main()
+{
+	introduction();
+
+	return 0;
+}

@@ -17,7 +17,6 @@
 #include <string>
 using namespace std;
 Manager::Manager() {
-
 }
 
 void Manager::insertNewRelation (string name) 
@@ -29,14 +28,20 @@ void Manager::insertNewRelation (string name)
 void Manager::setUpDatabase(vector<string> fileNames) {
 	for(int i=0; i<(int)fileNames.size(); i++)
 	{
+		string temp;
 		string name = fileNames[i];
 	//	cout<<name;
-		database.open(name);
+		database.open(name, temp);
+		cout << temp << endl;
+		info.append(temp);
 	}
 }
 
 void Manager::print() {
-	database.display();
+	string temp;
+	database.display(temp);
+	cout<< temp << endl;
+	info.append(temp);
 }
 
 
@@ -68,7 +73,10 @@ void Manager::insertFrom(string rel_name)
 
 void Manager::exit() //Command : EXIT;
 {
-	database.exit();
+	string temp;
+	database.exit(temp);
+	cout << temp << endl;
+	info.append(temp);
 	//database.exit() calls database.close(int i) for each table in
 	//database that isn't temp
 }
@@ -92,12 +100,18 @@ void Manager::update(string rel_name, vector<string> attriToChange, vector<strin
 	//NOT SURE IF UPDATING A SINGLE ENTITY OR
 	//UPDATING A SINGLE ATTRIBUTE IN EACH ENTITY IN
 	//A RELATION WHERE A SPECIFIC CONDITION IS MET
-	database.update(rel_name, attriToChange, newValue,  attriToCheck, valuesToCheck);
+	string temp;
+	database.update(rel_name, attriToChange, newValue,  attriToCheck, valuesToCheck, temp);
+	cout << temp;
+	info.append(temp);
 }
 
 void Manager::write(string rel_name) //Command : WRITE XXX;
 {
-	database.write(rel_name);
+	string temp;
+	database.write(rel_name, temp);
+	cout << temp << endl;
+	info.append(temp);
 	//simple enough, eh?
 
 }
@@ -105,22 +119,34 @@ void Manager::write(string rel_name) //Command : WRITE XXX;
 //Sid
 void Manager::createTable(string rel_name, vector<Attribute> attributes, vector<string> keys) 
 {
-	database.create_table(rel_name, attributes, keys);
+	string temp;
+	database.create_table(rel_name, attributes, keys, temp);
+	cout << temp << endl;
+	info.append(temp);
 }
 
 void Manager::open(string rel_name)
 {
-	database.open(rel_name);
+	string temp;
+	database.open(rel_name, temp);
+	cout << temp << endl;
+	info.append(temp);
 }
 
 void Manager::close(string rel_name)
 {
-	database.close(rel_name);
+	string temp;
+	database.close(rel_name, temp);
+	cout << temp << endl;
+	info.append(temp);
 }
 
 void Manager::show(string rel_name) 
 {
-	database.show(rel_name);
+	string temp;
+	database.show(rel_name, temp);
+	cout << temp << endl;
+	info.append(temp);
 }
 
 //Grace 
@@ -159,4 +185,10 @@ void Manager::cross(string rel_name1, string rel_name2, string new_name)
 
 
 
+}
+
+void Manager::writeToFile(string filename)
+{
+	ofstream file(filename);
+	file << this->info;
 }

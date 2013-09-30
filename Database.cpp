@@ -27,19 +27,21 @@ void Database::insertNewRelation(string name)
 }
 
 bool Database::create_table(string name_init, vector<Attribute> table_attributes, 
-							vector<string> primary_key)
+							vector<string> primary_key, string& output)
 {		
 	//Need to ensure that all attribute names are unique?
 	Relation r;
 	//watdo with primary key?
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
 		if (vec_relations[i].get_name() == name_init) {
-			printf("ERROR: Attempted to create duplicate table name; \n");
+			//printf("ERROR: Attempted to create duplicate table name; \n");
+			output.append("ERROR: Attempted to create duplicate table name;\n");
 			return 1;
 		}
 	}
 	if (! r.create(name_init, table_attributes, primary_key)) {
-		printf("ERROR: Failed to create table; \n");
+		//printf("ERROR: Failed to create table; \n");
+		output.append("ERROR: Failed to create table;\n");
 		return false;
 	}
 	
@@ -47,11 +49,11 @@ bool Database::create_table(string name_init, vector<Attribute> table_attributes
 	return true;
 }	
 
-void Database::show(string rel_name) {
+void Database::show(string rel_name, string& output) {
 	//printf("size: %d\n", vec_relations.size());
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
 		if (vec_relations[i].get_name() == rel_name) {
-			vec_relations[i].display();
+			vec_relations[i].display(output);
 			return;
 		}
 	}
@@ -67,14 +69,15 @@ void Database::remove(std::string rel_name) {
 }
 
 
-void Database::open(string rel_name) {
+void Database::open(string rel_name, string& output) {
 		ifstream tableFile;
 		tableFile.open(rel_name+".txt");
 		string attributes ="";
 		if(tableFile.good())
 			getline(tableFile, attributes);
 		else{
-			printf("Error reading relation file\n");
+			//printf("Error reading relation file\n");
+			output.append("Error reading relation file\n");
 		}
 		//Tokenize the first line, ignoring the first token which will just be "Attributes: "
 		vector<string> tokens = tokenizer(attributes);
@@ -93,7 +96,8 @@ void Database::open(string rel_name) {
 		if(tableFile.good())
 			getline(tableFile, keyLine);
 		else{
-			printf("Error reading relation file\n");
+			//printf("Error reading relation file\n");
+			output.append("Error reading relation file\n");
 		}
 		vector<string> keyData = tokenizer(keyLine);
 		vector<set<string> > keys;
@@ -117,7 +121,7 @@ void Database::open(string rel_name) {
 		vec_relations.push_back(r);
 }
 
-void Database::write(string rel_name) {
+void Database::write(string rel_name, string& output) {
 	//COMPILES BUT UNTESTED UNTIL EVERYTHING IS FULLY INTEGRATED
 	int rel_index = -1;
 	for (int i = 0; i < vec_relations.size(); ++i) {
@@ -126,7 +130,8 @@ void Database::write(string rel_name) {
 		}
 	}
 	if (rel_index == -1) {
-		printf("ERROR : Could not write nonexistent relation;\n");
+		//printf("ERROR : Could not write nonexistent relation;\n");
+		output.append("ERROR : Could not write nonexistent relation;\n");
 		return;
 	}
 	std::string rel_filename = rel_name + ".txt";
@@ -143,6 +148,7 @@ void Database::write(string rel_name) {
 	os << "Key: " << atts[( rand()%atts.size() )].get_name() << '\n';
 	//GRACE : IF YOU'RE READING THIS, I CLEARLY HAVE NO IDEA WHAT I'M DOING!!
 	//GRACE : SORRY!! -WES
+	//found those momments at midnight, hahahaha --Sid
 	std::vector<Entity> ents = vec_relations[rel_index].get_rel_ents();
 	for (int j = 0; j < ents.size(); ++j) {
 		std::vector<std::string> temp = ents[j].getData();
@@ -155,7 +161,7 @@ void Database::write(string rel_name) {
 	os.close();
 }
 
-void Database::close(string rel_name) {
+void Database::close(string rel_name, string&output) {
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
 		if (rel_name == vec_relations[i].get_name()) {
 			if (vec_relations[i].if_temp()) {
@@ -163,7 +169,7 @@ void Database::close(string rel_name) {
 				return;
 			}
 			else {
-				write(rel_name);
+				write(rel_name, output);
 				vec_relations.erase( (vec_relations.begin() + i) );
 				return;
 			}
@@ -171,23 +177,24 @@ void Database::close(string rel_name) {
 	}
 }
 
-void Database::close(int i) {
+void Database::close(int i, string &output) {
 	if (vec_relations[i].if_temp()) {
 		vec_relations.erase( (vec_relations.begin() + i) );
 		return;
 	}
 	else {
-		write(vec_relations[i].get_name());
+		write(vec_relations[i].get_name(), output);
 		vec_relations.erase( (vec_relations.begin() + i) );
 		return;
 	}
 }
 
-void Database::rename_table(std::string rel_name, std::string new_rel_name) {
+void Database::rename_table(std::string rel_name, std::string new_rel_name, string &output) {
 	int hold;
 	for (int i = 0; i < vec_relations.size(); ++i) {
 		if (vec_relations[i].get_name().compare(new_rel_name)==0) {
-			printf("ERROR: Renaming conflict, new name already in use; \n");
+			//printf("ERROR: Renaming conflict, new name already in use; \n");
+			output.append("ERROR: Renaming conflict, new name already in use; \n");
 				return;
 			}
 		if (vec_relations[i].get_name().compare(rel_name)==0) {
@@ -197,9 +204,9 @@ void Database::rename_table(std::string rel_name, std::string new_rel_name) {
 		vec_relations[hold].set_name(new_rel_name);
 }
 
-void Database::exit() {
+void Database::exit(string& output) {
 	for (int i = 0; i < (int)vec_relations.size(); ++i) {
-		close(i);
+		close(i, output);
 	}
 }
 
@@ -222,23 +229,23 @@ vector<string> Database::tokenizer(string line) {
 
 }
 
-void Database::display() {
+void Database::display(string& output) {
 	for(int i=0; i<(int)vec_relations.size(); i++)
-		vec_relations[i].display();
+		vec_relations[i].display(output);
 }
 
-void Database::display(string rel_name) {
+void Database::display(string rel_name, string& output) {
 	for(int i=0; i<(int)vec_relations.size(); i++)
 	{
 		if(vec_relations[i].get_name().compare(rel_name)==0)
 		{
-			vec_relations[i].display();
+			vec_relations[i].display(output);
 		}
 	}
 }
 
 
-void Database::test() {
+/*void Database::test() {
 
 	printf("***OPEN relations (animals, animals2, age) from text file and SHOW tables\n");
 	open("animals");
@@ -272,7 +279,7 @@ void Database::test() {
 	string str = "lion";
 	select("animals", "lions", a, str);
 	display("lions");
-	/*
+	
 	printf("***Projection test\n");
 	printf("Attributes: name, type\n");
 	vector<Attribute> att;
@@ -280,7 +287,7 @@ void Database::test() {
 	att.push_back(Attribute("type", 0));
 	projection(att, "animals", "names&types");
 	display("names&types");
-	*/
+	
 	printf("***Rename attribute 'tpye' to 'species' in lions\n");
 	rename("lions","type","species");
 	display("lions");
@@ -311,7 +318,7 @@ void Database::test() {
 	//update("animals",e12, e13);
 	display("animals");
 
-}
+}*/
 
 void Database::insert_into(string rel_name, Entity e) {
 	for(int i=0; i<(int)vec_relations.size(); i++)
@@ -520,12 +527,12 @@ void Database::cross(string rel_name1, string rel_name2, string new_name) {
 	//vec_relations.push_back(r3);
 }
 
-void Database::update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck){
+void Database::update(string rel_name, vector<string> attriToChange, vector<string> newValue,  vector<string> attriToCheck,  vector<string> valuesToCheck, string& output){
 	for(int i=0; i<(int)vec_relations.size(); i++)
 	{
 		if(vec_relations[i].get_name().compare(rel_name)==0)
 		{	
-			vec_relations[i].update(attriToChange,  newValue,  attriToCheck,  valuesToCheck);
+			vec_relations[i].update(attriToChange,  newValue,  attriToCheck,  valuesToCheck, output);
 		}
 	}
 
