@@ -18,18 +18,24 @@ void introduction()
 	cout << "***************************************************************"<<endl;
 	cout << "*                                                             *"<<endl;
 	cout << "*            Welcome to our world-class mini database         *"<<endl;                                            
-	cout << "*                                                             *"<<endl;
+	cout << "*        Authors: Grace Coffman, Sidian Wu, Wesley Tang       *"<<endl;
+	cout << "*                 Department of Computer Science              *"<<endl;
+	cout << "*                     Texas A&M University                    *"<<endl;
 	cout << "***************************************************************"<<endl;
 
-	cout<< "1 -- commands from text"<<endl;
-	cout<< "2 -- commands from keyboard"<<endl;
+	cout << endl;
+	cout<<"please select which mode you want."<<endl;
+	cout<< endl;
+	cout<< "1 -- commands from text."<<endl;
+	cout<< "2 -- commands from keyboard."<<endl;
 
 	string choice;
 	cin >> choice;
 
 	while(choice != "1" && choice != "2")
 	{
-		cout << "Input error, try again"<<endl;
+		cout << "Input error, try again."<<endl;
+		cout << endl;
 		cin >> choice;
 	}
 
@@ -74,22 +80,26 @@ void introduction()
 	}
 	else
 	{
-		cin >> line;
+		cout << endl;
+		cout << "Please type command from your keyboard now!"<<endl;
+		cout << endl;
+
+		cin.sync(); //to clear cin's buffer
+		getline(cin, line);
 
 		while(line != "Exit")
 		{
 			bool valid = p.validate(line);
 			if(valid)
-			{
-					//may need some change on output.
-			}
+				cout<< "command accepted! Go ahead for another command or type \"Exit\" to quit."<<endl;
 			else
-			{
 				cout<<"Error: Command is NOT valid\n";
-			}
-			cin >> line;
+
+			cin.sync();
+			cout << endl;
+			getline(cin, line);
 		}
-		p.validate("Exit");
+		p.validate("Exit;");
 	}
 
 	p.writeTofile("output.txt");
@@ -97,13 +107,14 @@ void introduction()
 
 int main()
 {
-//	introduction();
-	Parser* p = new Parser();
-	p->validate("CREATE TABLE animals (name VARCHAR, kind VARCHAR, years INTEGER) PRIMARY KEY (name, kind);");
-	p->validate("INSERT INTO animals VALUES FROM (Joe, cat, 4);");
-	p->validate("INSERT INTO animals VALUES FROM (Spot, dog, 10);");
-	p->validate("SHOW animals;");
-	p->writeTofile("output.txt");
+	introduction();
+	//Parser* p = new Parser();
+	//p->validate("CREATE TABLE animals (name VARCHAR, kind VARCHAR, years INTEGER) PRIMARY KEY (name, kind);");
+	//p->validate("INSERT INTO animals VALUES FROM (Joe, cat, 4);");
+	//p->validate("INSERT INTO animals VALUES FROM (Spot, dog, 10);");
+	//p->validate("SHOW animals;");
+	//p->validate("Exit;");
+	//p->writeTofile("output.txt");
 
 	return 0;
 }
