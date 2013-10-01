@@ -46,7 +46,7 @@ void Manager::print() {
 
 
 void Manager::test() {
-	database.test();
+//	database.test();
 }
 
 

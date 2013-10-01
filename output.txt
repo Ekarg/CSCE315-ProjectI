@@ -1,0 +1,6 @@
+Relation: animals
+name	kind	years	
+====	====	=====	
+Joe	cat	4		
+Spot	dog	10		
+

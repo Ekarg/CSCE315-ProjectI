@@ -97,7 +97,13 @@ void introduction()
 
 int main()
 {
-	introduction();
+//	introduction();
+	Parser* p = new Parser();
+	p->validate("CREATE TABLE animals (name VARCHAR, kind VARCHAR, years INTEGER) PRIMARY KEY (name, kind);");
+	p->validate("INSERT INTO animals VALUES FROM (Joe, cat, 4);");
+	p->validate("INSERT INTO animals VALUES FROM (Spot, dog, 10);");
+	p->validate("SHOW animals;");
+	p->writeTofile("output.txt");
 
 	return 0;
 }

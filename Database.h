@@ -59,7 +59,7 @@ public:
 	
 	//** Basic Set Functions **//
 	void set_name(std::string s) { name = s; } 
-	void test();
+//	void test();
 
 };
 
